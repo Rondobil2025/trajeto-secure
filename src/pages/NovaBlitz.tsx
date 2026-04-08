@@ -289,10 +289,12 @@ export default function NovaBlitz() {
     </svg>
   );
 
-  const vehicleIcons = {
+  const vehicleIcons: Record<string, any> = {
     bicicleta: Bike,
     moto: MotoIcon,
     carro: Car,
+    onibus: Bus,
+    carona: Users,
   };
 
   return (
