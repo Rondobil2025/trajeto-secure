@@ -23,6 +23,37 @@ interface CnhOcrData {
 
 const STEPS = ['Identificação', 'Colaborador', 'Veículo & Fotos', 'Checklist', 'Anomalias', 'Revisão'];
 
+function OcrCompareRow({ label, ocrValue, dbValue, compare, formatValue }: {
+  label: string;
+  ocrValue: string | null;
+  dbValue: string | null;
+  compare: (a: string, b: string) => boolean;
+  formatValue?: (v: string | null) => string;
+}) {
+  const fmt = formatValue || ((v: string | null) => v || '—');
+  const match = ocrValue && dbValue ? compare(ocrValue, dbValue) : null;
+
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <span className="text-muted-foreground w-24 shrink-0">{label}</span>
+      <span className="font-medium truncate">{fmt(ocrValue)}</span>
+      {match === true && (
+        <span className="flex items-center gap-1 text-status-ok shrink-0">
+          <CheckCheck className="h-3.5 w-3.5" /> <span className="text-xs">OK</span>
+        </span>
+      )}
+      {match === false && (
+        <span className="flex items-center gap-1 text-status-danger shrink-0" title={`Cadastro: ${fmt(dbValue)}`}>
+          <XCircle className="h-3.5 w-3.5" /> <span className="text-xs">Diverge</span>
+        </span>
+      )}
+      {match === null && (
+        <span className="text-xs text-muted-foreground shrink-0">—</span>
+      )}
+    </div>
+  );
+}
+
 export default function NovaBlitz() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
