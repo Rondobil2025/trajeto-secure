@@ -40,7 +40,27 @@ export default function NovaBlitz() {
   const [fotoCnh, setFotoCnh] = useState<string | null>(null);
   const [fotoPlaca, setFotoPlaca] = useState<string | null>(null);
   const [fotosAnomalia, setFotosAnomalia] = useState<string[]>([]);
-  const validarLider = () => {
+  const [ocrData, setOcrData] = useState<CnhOcrData | null>(null);
+  const [ocrLoading, setOcrLoading] = useState(false);
+
+  const runOcrCnh = async (imageUrl: string) => {
+    setOcrLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ocr-cnh', {
+        body: { imageUrl },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      setOcrData(data as CnhOcrData);
+      toast({ title: 'CNH lida com sucesso via IA!' });
+    } catch (err: any) {
+      console.error('OCR error:', err);
+      toast({ title: 'Não foi possível ler a CNH', description: err?.message, variant: 'destructive' });
+    } finally {
+      setOcrLoading(false);
+    }
+  };
+
     const cpf = cleanCPF(cpfLider);
     // TODO: validate against liderancas table
     if (cpf.length === 11 && senha === '1234') {
