@@ -14,6 +14,12 @@ import AdminColaboradores from "./pages/AdminColaboradores";
 import AdminLiderancas from "./pages/AdminLiderancas";
 import AdminAuditoria from "./pages/AdminAuditoria";
 import AdminInventario from "./pages/AdminInventario";
+import AdminBlitz from "./pages/AdminBlitz";
+import AdminPlanosAcao from "./pages/AdminPlanosAcao";
+import AdminTermos from "./pages/AdminTermos";
+import AdminImportar from "./pages/AdminImportar";
+import AdminRelatorios from "./pages/AdminRelatorios";
+import AdminConfiguracoes from "./pages/AdminConfiguracoes";
 
 const queryClient = new QueryClient();
 
@@ -30,18 +36,18 @@ const App = () => (
           <Route path="/portal/consultar" element={<ConsultarBlitz />} />
           <Route path="/portal/pendencias" element={<Pendencias />} />
           <Route path="/portal/planos" element={<PlanosAcao />} />
-          {/* Admin */}
+          {/* Admin (web) */}
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/colaboradores" element={<AdminColaboradores />} />
           <Route path="/admin/inventario" element={<AdminInventario />} />
           <Route path="/admin/liderancas" element={<AdminLiderancas />} />
-          <Route path="/admin/blitz" element={<ConsultarBlitz />} />
-          <Route path="/admin/planos" element={<PlanosAcao />} />
+          <Route path="/admin/blitz" element={<AdminBlitz />} />
+          <Route path="/admin/planos" element={<AdminPlanosAcao />} />
+          <Route path="/admin/termos" element={<AdminTermos />} />
+          <Route path="/admin/importar" element={<AdminImportar />} />
           <Route path="/admin/auditoria" element={<AdminAuditoria />} />
-          <Route path="/admin/termos" element={<NotFound />} />
-          <Route path="/admin/importar" element={<NotFound />} />
-          <Route path="/admin/relatorios" element={<NotFound />} />
-          <Route path="/admin/configuracoes" element={<NotFound />} />
+          <Route path="/admin/relatorios" element={<AdminRelatorios />} />
+          <Route path="/admin/configuracoes" element={<AdminConfiguracoes />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
