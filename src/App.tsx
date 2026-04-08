@@ -48,6 +48,7 @@ const App = () => (
           <Route path="/admin/importar" element={<AdminImportar />} />
           <Route path="/admin/auditoria" element={<AdminAuditoria />} />
           <Route path="/admin/relatorios" element={<AdminRelatorios />} />
+          <Route path="/admin/checklist" element={<AdminChecklist />} />
           <Route path="/admin/configuracoes" element={<AdminConfiguracoes />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
