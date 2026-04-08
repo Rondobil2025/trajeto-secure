@@ -156,7 +156,11 @@ export default function NovaBlitz() {
     setSalvando(true);
 
     try {
-      const naoConformes = checklist.filter(q => respostas[q.id] === 'nao');
+      const naoConformes = checklist.filter(q => {
+        if (q.informativo) return false;
+        if (q.invertido) return respostas[q.id] === 'sim';
+        return respostas[q.id] === 'nao';
+      });
       const statusFinal = (naoConformes.length > 0 || temAnomalia)
         ? (naoConformes.some(q => q.critico) || temAnomalia ? 'nao_conforme' : 'conforme_observacoes')
         : 'conforme';
