@@ -279,9 +279,19 @@ export default function NovaBlitz() {
     }
   }, [colaborador, checklist, respostas, veiculoTipo, temAnomalia, descAnomalia, fotoVeiculo, fotoCnh, fotoPlaca, fotosAnomalia, navigate, queryClient]);
 
+  const MotoIcon = ({ className }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="5" cy="17" r="3" />
+      <circle cx="19" cy="17" r="3" />
+      <path d="M9 17h6" />
+      <path d="M19 17l-2-6h-4l-3 3-3-1" />
+      <path d="M13 11V7l2-2" />
+    </svg>
+  );
+
   const vehicleIcons = {
     bicicleta: Bike,
-    moto: Truck,
+    moto: MotoIcon,
     carro: Car,
   };
 
