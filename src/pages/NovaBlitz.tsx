@@ -476,8 +476,42 @@ export default function NovaBlitz() {
                 <div className="flex justify-between"><span className="text-muted-foreground">Itens checados</span><span>{Object.keys(respostas).length}/{checklist.length}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Não conformidades</span><span>{Object.values(respostas).filter(r => r === 'nao').length}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Anomalia</span><span>{temAnomalia ? 'Sim' : 'Não'}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Fotos</span><span>{[fotoVeiculo, fotoCnh, fotoPlaca].filter(Boolean).length + fotosAnomalia.length}</span></div>
               </div>
             </div>
+
+            {/* Photo thumbnails */}
+            {(fotoVeiculo || fotoCnh || fotoPlaca || fotosAnomalia.length > 0) && (
+              <div className="rounded-xl border bg-card p-4">
+                <h4 className="text-xs font-medium text-muted-foreground mb-2">Fotos registradas</h4>
+                <div className="grid grid-cols-4 gap-2">
+                  {fotoVeiculo && (
+                    <div className="relative rounded-lg overflow-hidden aspect-square">
+                      <img src={fotoVeiculo} alt="Veículo" className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] text-center py-0.5">Veículo</span>
+                    </div>
+                  )}
+                  {fotoCnh && (
+                    <div className="relative rounded-lg overflow-hidden aspect-square">
+                      <img src={fotoCnh} alt="CNH" className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] text-center py-0.5">CNH</span>
+                    </div>
+                  )}
+                  {fotoPlaca && (
+                    <div className="relative rounded-lg overflow-hidden aspect-square">
+                      <img src={fotoPlaca} alt="Placa" className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] text-center py-0.5">Placa</span>
+                    </div>
+                  )}
+                  {fotosAnomalia.map((url, i) => (
+                    <div key={i} className="relative rounded-lg overflow-hidden aspect-square">
+                      <img src={url} alt={`Anomalia ${i+1}`} className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] text-center py-0.5">Anomalia</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {Object.values(respostas).some(r => r === 'nao') || temAnomalia ? (
               <div className="rounded-xl bg-status-danger/10 border border-status-danger/30 p-4 text-center">
