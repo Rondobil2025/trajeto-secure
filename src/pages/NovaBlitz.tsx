@@ -406,7 +406,7 @@ export default function NovaBlitz() {
             <div>
               <Label>Selecione o tipo de veículo</Label>
               <div className="grid grid-cols-3 gap-3 mt-2">
-                {(['bicicleta', 'moto', 'carro'] as VehicleType[]).map(tipo => {
+                {(['bicicleta', 'moto', 'carro', 'onibus', 'carona'] as VehicleType[]).map(tipo => {
                   const Icon = vehicleIcons[tipo];
                   const active = veiculoTipo === tipo;
                   return (
