@@ -134,6 +134,8 @@ export function getChecklist(tipo: VehicleType): ChecklistQuestion[] {
     case 'bicicleta': return CHECKLIST_BICICLETA;
     case 'moto': return CHECKLIST_MOTO;
     case 'carro': return CHECKLIST_CARRO;
+    case 'onibus': return CHECKLIST_BICICLETA; // minimal checklist for bus users
+    case 'carona': return CHECKLIST_BICICLETA; // minimal checklist for carpool
   }
 }
 
