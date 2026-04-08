@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 const MENU = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/admin/colaboradores', icon: Users, label: 'Colaboradores' },
+  { to: '/admin/inventario', icon: Car, label: 'Inventário Veículos' },
   { to: '/admin/liderancas', icon: UserCheck, label: 'Lideranças' },
   { to: '/admin/blitz', icon: ClipboardList, label: 'Blitz' },
   { to: '/admin/planos', icon: AlertTriangle, label: 'Planos de Ação' },
