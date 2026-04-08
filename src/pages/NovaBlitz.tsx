@@ -14,7 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 import type { ColaboradorDB } from '@/hooks/useColaboradores';
 import { PhotoCapture, MultiPhotoCapture } from '@/components/PhotoCapture';
 
-const STEPS = ['Identificação', 'Colaborador', 'Veículo', 'Checklist', 'Anomalias', 'Revisão'];
+const STEPS = ['Identificação', 'Colaborador', 'Veículo & Fotos', 'Checklist', 'Anomalias', 'Revisão'];
 
 export default function NovaBlitz() {
   const navigate = useNavigate();
