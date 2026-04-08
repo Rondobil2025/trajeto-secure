@@ -1,5 +1,5 @@
 export type UserRole = 'admin' | 'leadership' | 'viewer';
-export type VehicleType = 'bicicleta' | 'moto' | 'carro';
+export type VehicleType = 'bicicleta' | 'moto' | 'carro' | 'onibus' | 'carona';
 export type BlitzStatus = 'conforme' | 'conforme_observacoes' | 'nao_conforme';
 export type PlanStatus = 'aberto' | 'em_andamento' | 'vencido' | 'concluido';
 export type Priority = 'baixa' | 'media' | 'alta' | 'critica';
