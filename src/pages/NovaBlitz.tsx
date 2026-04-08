@@ -292,14 +292,20 @@ export default function NovaBlitz() {
         <button onClick={() => step > 0 ? setStep(step - 1) : navigate('/portal')} className="text-primary-foreground/70 mb-3 flex items-center gap-1 text-sm">
           <ArrowLeft className="h-4 w-4" /> Voltar
         </button>
-        <h1 className="text-lg font-bold font-display text-primary-foreground">Nova Blitz</h1>
-        <p className="text-xs text-primary-foreground/60 mt-1">Passo {step + 1} de {STEPS.length} — {STEPS[step]}</p>
+        <div className="flex items-center gap-2">
+          <h1 className="text-lg font-extrabold font-display text-primary-foreground">Nova Blitz</h1>
+          <span className="text-[10px] bg-primary-foreground/20 text-primary-foreground px-2 py-0.5 rounded-full font-semibold">
+            {step + 1}/{STEPS.length}
+          </span>
+        </div>
+        <p className="text-xs text-primary-foreground/60 mt-0.5">{STEPS[step]}</p>
         <div className="flex gap-1 mt-3">
           {STEPS.map((_, i) => (
-            <div key={i} className={cn('h-1 flex-1 rounded-full transition-colors', i <= step ? 'bg-primary-foreground' : 'bg-primary-foreground/20')} />
+            <div key={i} className={cn('h-1 flex-1 rounded-full transition-colors', i <= step ? 'bg-secondary' : 'bg-primary-foreground/20')} />
           ))}
         </div>
       </div>
+      <div className="yellow-stripe h-1" />
 
       <div className="px-4 py-6 max-w-lg mx-auto space-y-4">
         {/* Step 0: Login liderança */}
