@@ -12,6 +12,7 @@ import { MobileNav } from '@/components/MobileNav';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import type { ColaboradorDB } from '@/hooks/useColaboradores';
+import { PhotoCapture, MultiPhotoCapture } from '@/components/PhotoCapture';
 
 const STEPS = ['Identificação', 'Colaborador', 'Veículo', 'Checklist', 'Anomalias', 'Revisão'];
 
