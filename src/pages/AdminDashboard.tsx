@@ -1,6 +1,8 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
 import { KpiCard } from '@/components/KpiCard';
 import { useColaboradores } from '@/hooks/useColaboradores';
+import { useBlitzList } from '@/hooks/useBlitz';
+import { usePlanosAcao } from '@/hooks/usePlanosAcao';
 import {
   Users, ClipboardCheck, AlertTriangle, TrendingUp, Car, Bike, Truck,
   FileWarning, ShieldAlert, ClipboardList, Loader2
@@ -12,43 +14,45 @@ import {
 import { useMemo } from 'react';
 
 export default function AdminDashboard() {
-  const { data: colaboradores = [], isLoading } = useColaboradores();
+  const { data: colaboradores = [], isLoading: loadingColab } = useColaboradores();
+  const { data: blitzList = [], isLoading: loadingBlitz } = useBlitzList();
+  const { data: planos = [], isLoading: loadingPlanos } = usePlanosAcao();
+
+  const isLoading = loadingColab || loadingBlitz || loadingPlanos;
 
   const stats = useMemo(() => {
     const total = colaboradores.length;
     const cnhVencidas = colaboradores.filter(c => c.cnh_status === 'vencida').length;
     const semCnh = colaboradores.filter(c => c.cnh_status === 'sem_cnh').length;
 
-    // Count by sector
     const porSetor: Record<string, number> = {};
     colaboradores.forEach(c => {
       porSetor[c.setor] = (porSetor[c.setor] || 0) + 1;
     });
 
-    // Count by vehicle-related function names
     const motoristas = colaboradores.filter(c =>
       c.funcao.toLowerCase().includes('motorista') || c.funcao.toLowerCase().includes('truck') || c.funcao.toLowerCase().includes('van')
     ).length;
 
-    // Pendentes (sem blitz ou vencida)
     const pendentes = colaboradores.filter(c => {
       if (!c.data_ultima_blitz) return true;
       const diff = (Date.now() - new Date(c.data_ultima_blitz).getTime()) / (1000 * 60 * 60 * 24);
-      return diff > 90; // simplified
+      return diff > 90;
     }).length;
 
-    // Aderência geral
     const totalAderencia = colaboradores.reduce((sum, c) => sum + c.aderencia, 0);
     const aderenciaGeral = total > 0 ? Math.round(totalAderencia / total) : 0;
 
-    // Chart data - by sector
     const setorData = Object.entries(porSetor).map(([setor, count]) => ({
       setor,
       total: count,
     }));
 
-    return { total, cnhVencidas, semCnh, motoristas, pendentes, aderenciaGeral, setorData };
-  }, [colaboradores]);
+    const planosAbertos = planos.filter(p => p.status === 'aberto').length;
+    const planosVencidos = planos.filter(p => p.status === 'vencido').length;
+
+    return { total, cnhVencidas, semCnh, motoristas, pendentes, aderenciaGeral, setorData, totalBlitz: blitzList.length, planosAbertos, planosVencidos };
+  }, [colaboradores, blitzList, planos]);
 
   const veiculoData = useMemo(() => {
     const counts = { 'Motorista Truck': 0, 'Motorista VAN': 0, 'Outros': 0 };
@@ -86,22 +90,21 @@ export default function AdminDashboard() {
         </div>
 
         <div className="px-4 md:px-8 py-6 space-y-8 -mt-4">
-          {/* KPIs */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             <KpiCard title="Colaboradores" value={stats.total} icon={Users} />
             <KpiCard title="Motoristas" value={stats.motoristas} icon={Truck} />
+            <KpiCard title="Total Blitz" value={stats.totalBlitz} icon={ClipboardCheck} />
             <KpiCard title="Pendentes" value={stats.pendentes} icon={AlertTriangle} variant="warning" />
             <KpiCard title="Aderência" value={`${stats.aderenciaGeral}%`} icon={TrendingUp} variant={stats.aderenciaGeral >= 80 ? 'ok' : 'warning'} />
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <KpiCard title="CNH Vencidas" value={stats.cnhVencidas} icon={ShieldAlert} variant="danger" />
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             <KpiCard title="Sem CNH" value={stats.semCnh} icon={FileWarning} variant="danger" />
-            <KpiCard title="Planos Abertos" value={0} icon={ClipboardList} variant="warning" />
-            <KpiCard title="Planos Vencidos" value={0} icon={AlertTriangle} variant="danger" />
+            <KpiCard title="Planos Abertos" value={stats.planosAbertos} icon={ClipboardList} variant="warning" />
+            <KpiCard title="Planos Vencidos" value={stats.planosVencidos} icon={AlertTriangle} variant="danger" />
           </div>
 
-          {/* Charts */}
           <div className="grid md:grid-cols-2 gap-6">
             <div className="rounded-xl border bg-card p-5">
               <h3 className="font-semibold font-display mb-4">Colaboradores por Setor</h3>
