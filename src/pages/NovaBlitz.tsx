@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, Camera, Bike, Car, Truck, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Camera, Bike, Car, Truck, AlertTriangle, Loader2, ImageIcon } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
