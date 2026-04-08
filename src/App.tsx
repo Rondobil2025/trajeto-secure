@@ -13,6 +13,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminColaboradores from "./pages/AdminColaboradores";
 import AdminLiderancas from "./pages/AdminLiderancas";
 import AdminAuditoria from "./pages/AdminAuditoria";
+import AdminInventario from "./pages/AdminInventario";
 
 const queryClient = new QueryClient();
 
