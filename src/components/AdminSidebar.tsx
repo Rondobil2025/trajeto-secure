@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, UserCheck, ClipboardList, FileText,
-  Upload, Shield, Settings, BarChart3, AlertTriangle, Car
+  Upload, Shield, Settings, BarChart3, AlertTriangle, Car, CheckSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -11,6 +11,7 @@ const MENU = [
   { to: '/admin/inventario', icon: Car, label: 'Inventário Veículos' },
   { to: '/admin/liderancas', icon: UserCheck, label: 'Lideranças' },
   { to: '/admin/blitz', icon: ClipboardList, label: 'Blitz' },
+  { to: '/admin/checklist', icon: CheckSquare, label: 'Checklist' },
   { to: '/admin/planos', icon: AlertTriangle, label: 'Planos de Ação' },
   { to: '/admin/termos', icon: FileText, label: 'Termos' },
   { to: '/admin/importar', icon: Upload, label: 'Importar QLP' },

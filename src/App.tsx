@@ -20,6 +20,7 @@ import AdminTermos from "./pages/AdminTermos";
 import AdminImportar from "./pages/AdminImportar";
 import AdminRelatorios from "./pages/AdminRelatorios";
 import AdminConfiguracoes from "./pages/AdminConfiguracoes";
+import AdminChecklist from "./pages/AdminChecklist";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/admin/importar" element={<AdminImportar />} />
           <Route path="/admin/auditoria" element={<AdminAuditoria />} />
           <Route path="/admin/relatorios" element={<AdminRelatorios />} />
+          <Route path="/admin/checklist" element={<AdminChecklist />} />
           <Route path="/admin/configuracoes" element={<AdminConfiguracoes />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
