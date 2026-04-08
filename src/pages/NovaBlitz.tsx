@@ -214,7 +214,7 @@ export default function NovaBlitz() {
     } finally {
       setSalvando(false);
     }
-  }, [colaborador, checklist, respostas, veiculoTipo, temAnomalia, descAnomalia, navigate, queryClient]);
+  }, [colaborador, checklist, respostas, veiculoTipo, temAnomalia, descAnomalia, fotoVeiculo, fotoCnh, fotoPlaca, fotosAnomalia, navigate, queryClient]);
 
   const vehicleIcons = {
     bicicleta: Bike,
