@@ -321,28 +321,64 @@ export default function NovaBlitz() {
 
         {/* Step 2: Tipo de veículo */}
         {step === 2 && (
-          <div className="space-y-4 animate-fade-in">
-            <Label>Selecione o tipo de veículo</Label>
-            <div className="grid grid-cols-3 gap-3">
-              {(['bicicleta', 'moto', 'carro'] as VehicleType[]).map(tipo => {
-                const Icon = vehicleIcons[tipo];
-                const active = veiculoTipo === tipo;
-                return (
-                  <button
-                    key={tipo}
-                    onClick={() => setVeiculoTipo(tipo)}
-                    className={cn(
-                      'flex flex-col items-center gap-2 rounded-xl border-2 p-6 transition-all',
-                      active ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
-                    )}
-                  >
-                    <Icon className={cn('h-8 w-8', active ? 'text-primary' : 'text-muted-foreground')} />
-                    <span className={cn('text-sm font-medium', active ? 'text-primary' : 'text-muted-foreground')}>
-                      {getVehicleLabel(tipo)}
-                    </span>
-                  </button>
-                );
-              })}
+          <div className="space-y-5 animate-fade-in">
+            <div>
+              <Label>Selecione o tipo de veículo</Label>
+              <div className="grid grid-cols-3 gap-3 mt-2">
+                {(['bicicleta', 'moto', 'carro'] as VehicleType[]).map(tipo => {
+                  const Icon = vehicleIcons[tipo];
+                  const active = veiculoTipo === tipo;
+                  return (
+                    <button
+                      key={tipo}
+                      onClick={() => setVeiculoTipo(tipo)}
+                      className={cn(
+                        'flex flex-col items-center gap-2 rounded-xl border-2 p-5 transition-all',
+                        active ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+                      )}
+                    >
+                      <Icon className={cn('h-7 w-7', active ? 'text-primary' : 'text-muted-foreground')} />
+                      <span className={cn('text-sm font-medium', active ? 'text-primary' : 'text-muted-foreground')}>
+                        {getVehicleLabel(tipo)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-semibold text-sm flex items-center gap-2">
+                <Camera className="h-4 w-4 text-primary" /> Registro Fotográfico
+              </h3>
+
+              <PhotoCapture
+                label="📸 Foto do Veículo"
+                folder="veiculos"
+                currentUrl={fotoVeiculo}
+                onCapture={setFotoVeiculo}
+                onRemove={() => setFotoVeiculo(null)}
+              />
+
+              {(veiculoTipo === 'moto' || veiculoTipo === 'carro') && (
+                <>
+                  <PhotoCapture
+                    label="🪪 Foto da CNH"
+                    folder="cnh"
+                    currentUrl={fotoCnh}
+                    onCapture={setFotoCnh}
+                    onRemove={() => setFotoCnh(null)}
+                  />
+
+                  <PhotoCapture
+                    label="🔢 Foto da Placa"
+                    folder="placas"
+                    currentUrl={fotoPlaca}
+                    onCapture={setFotoPlaca}
+                    onRemove={() => setFotoPlaca(null)}
+                  />
+                </>
+              )}
             </div>
           </div>
         )}
