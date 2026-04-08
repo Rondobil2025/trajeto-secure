@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -67,6 +67,8 @@ export default {
           DEFAULT: "hsl(var(--status-info))",
           foreground: "hsl(var(--status-info-foreground))",
         },
+        "brand-green": "hsl(var(--brand-green))",
+        "brand-yellow": "hsl(var(--brand-yellow))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

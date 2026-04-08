@@ -2,42 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 220 25% 10%;
+    --background: 140 10% 97%;
+    --foreground: 160 30% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card-foreground: 160 30% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover-foreground: 160 30% 8%;
 
-    --primary: 220 70% 25%;
+    --primary: 152 72% 22%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 30% 94%;
-    --secondary-foreground: 220 25% 10%;
+    --secondary: 45 93% 47%;
+    --secondary-foreground: 160 30% 8%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 15% 48%;
+    --muted: 140 10% 94%;
+    --muted-foreground: 160 10% 45%;
 
-    --accent: 210 30% 94%;
-    --accent-foreground: 220 25% 10%;
+    --accent: 152 30% 92%;
+    --accent-foreground: 152 72% 22%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 20% 90%;
-    --input: 214 20% 90%;
-    --ring: 220 70% 25%;
+    --border: 150 15% 88%;
+    --input: 150 15% 88%;
+    --ring: 152 72% 22%;
 
     --radius: 0.75rem;
 
     /* Status colors */
-    --status-ok: 142 71% 45%;
+    --status-ok: 152 72% 35%;
     --status-ok-foreground: 0 0% 100%;
     --status-warning: 38 92% 50%;
     --status-warning-foreground: 0 0% 100%;
@@ -47,17 +47,20 @@
     --status-info-foreground: 0 0% 100%;
 
     /* Brand */
-    --brand-gradient: linear-gradient(135deg, hsl(220 70% 25%), hsl(217 91% 40%));
-    --brand-gradient-soft: linear-gradient(135deg, hsl(220 70% 25% / 0.08), hsl(217 91% 60% / 0.08));
+    --brand-green: 152 72% 22%;
+    --brand-yellow: 45 93% 47%;
+    --brand-gradient: linear-gradient(135deg, hsl(152 72% 22%), hsl(152 60% 30%));
+    --brand-gradient-warm: linear-gradient(135deg, hsl(152 72% 22%), hsl(45 93% 47%));
+    --brand-gradient-soft: linear-gradient(135deg, hsl(152 72% 22% / 0.06), hsl(45 93% 47% / 0.06));
 
-    --sidebar-background: 220 25% 10%;
-    --sidebar-foreground: 210 20% 96%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 25% 16%;
-    --sidebar-accent-foreground: 210 20% 96%;
-    --sidebar-border: 220 25% 18%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-background: 152 40% 10%;
+    --sidebar-foreground: 140 10% 96%;
+    --sidebar-primary: 45 93% 52%;
+    --sidebar-primary-foreground: 160 30% 8%;
+    --sidebar-accent: 152 30% 16%;
+    --sidebar-accent-foreground: 140 10% 96%;
+    --sidebar-border: 152 30% 18%;
+    --sidebar-ring: 45 93% 52%;
   }
 }
 
@@ -69,13 +72,16 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
 }
 
 @layer utilities {
   .brand-gradient {
     background: var(--brand-gradient);
+  }
+  .brand-gradient-warm {
+    background: var(--brand-gradient-warm);
   }
   .brand-gradient-soft {
     background: var(--brand-gradient-soft);
@@ -94,5 +100,8 @@
   }
   .glass-card {
     @apply bg-card/80 backdrop-blur-sm border shadow-sm;
+  }
+  .yellow-stripe {
+    background: linear-gradient(90deg, hsl(45 93% 47%), hsl(40 90% 55%));
   }
 }
