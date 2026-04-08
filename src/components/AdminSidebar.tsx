@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, UserCheck, ClipboardList, FileText,
-  Upload, Shield, Settings, BarChart3, AlertTriangle, Car
+  Upload, Shield, Settings, BarChart3, AlertTriangle, Car, CheckSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
