@@ -57,7 +57,6 @@ export function PhotoCapture({ label, folder, onCapture, currentUrl, onRemove, c
         ref={inputRef}
         type="file"
         accept={accept}
-        capture="environment"
         className="hidden"
         onChange={handleChange}
       />
@@ -156,7 +155,6 @@ export function MultiPhotoCapture({ label, folder, urls, onAdd, onRemove, maxPho
         ref={inputRef}
         type="file"
         accept="image/*"
-        capture="environment"
         className="hidden"
         onChange={handleChange}
       />

@@ -83,32 +83,50 @@ export interface ChecklistQuestion {
   id: string;
   pergunta: string;
   critico: boolean;
+  /** Quando true, "Não" é a resposta conforme (verde) e "Sim" é não conforme (vermelho) */
+  invertido?: boolean;
+  /** Quando true, a pergunta é apenas informativa e não gera não-conformidade */
+  informativo?: boolean;
 }
 
 export const CHECKLIST_BICICLETA: ChecklistQuestion[] = [
-  { id: 'bic_1', pergunta: 'Utiliza EPI?', critico: true },
-  { id: 'bic_2', pergunta: 'Pneus em boas condições?', critico: true },
-  { id: 'bic_3', pergunta: 'Freios funcionando corretamente?', critico: true },
+  { id: 'bic_1', pergunta: 'Utiliza EPI (colete refletivo, luvas)?', critico: true },
+  { id: 'bic_2', pergunta: 'Pneus em boas condições (calibrados, sem desgaste)?', critico: true },
+  { id: 'bic_3', pergunta: 'Freios dianteiro e traseiro funcionando corretamente?', critico: true },
   { id: 'bic_4', pergunta: 'Capacete em boas condições e utilizado corretamente?', critico: true },
-  { id: 'bic_5', pergunta: 'Iluminação e sinais reflexivos funcionando?', critico: false },
+  { id: 'bic_5', pergunta: 'Iluminação e sinais reflexivos presentes e funcionando?', critico: false },
+  { id: 'bic_6', pergunta: 'Campainha/buzina funcionando?', critico: false },
+  { id: 'bic_7', pergunta: 'Corrente e câmbio em boas condições?', critico: false },
 ];
 
 export const CHECKLIST_MOTO: ChecklistQuestion[] = [
-  { id: 'mot_1', pergunta: 'Veículo próprio ou da companhia?', critico: false },
-  { id: 'mot_2', pergunta: 'Veículo é utilizado como meio de trabalho?', critico: false },
-  { id: 'mot_3', pergunta: 'Pneus em boas condições?', critico: true },
-  { id: 'mot_4', pergunta: 'Retrovisores presentes e ajustados?', critico: true },
-  { id: 'mot_5', pergunta: 'Capacete em boas condições e utilizado corretamente?', critico: true },
-  { id: 'mot_6', pergunta: 'Luzes e setas funcionando?', critico: true },
-  { id: 'mot_7', pergunta: 'Há vazamento de óleo ou fluidos?', critico: true },
+  { id: 'mot_1', pergunta: 'Veículo próprio ou da companhia?', critico: false, informativo: true },
+  { id: 'mot_2', pergunta: 'Veículo é utilizado como meio de trabalho?', critico: false, informativo: true },
+  { id: 'mot_3', pergunta: 'CNH dentro da validade e categoria compatível?', critico: true },
+  { id: 'mot_4', pergunta: 'Pneus em boas condições (calibrados, sem desgaste)?', critico: true },
+  { id: 'mot_5', pergunta: 'Retrovisores presentes e ajustados (ambos os lados)?', critico: true },
+  { id: 'mot_6', pergunta: 'Capacete com viseira em boas condições e utilizado corretamente?', critico: true },
+  { id: 'mot_7', pergunta: 'Faróis, luzes de freio e setas funcionando?', critico: true },
+  { id: 'mot_8', pergunta: 'Freios dianteiro e traseiro funcionando?', critico: true },
+  { id: 'mot_9', pergunta: 'Há vazamento de óleo ou fluidos?', critico: true, invertido: true },
+  { id: 'mot_10', pergunta: 'Escapamento em boas condições (sem barulho excessivo)?', critico: false },
+  { id: 'mot_11', pergunta: 'Documentação do veículo em dia (CRLV)?', critico: true },
 ];
 
 export const CHECKLIST_CARRO: ChecklistQuestion[] = [
-  { id: 'car_1', pergunta: 'Pneus em boas condições?', critico: true },
-  { id: 'car_2', pergunta: 'Faróis e luzes funcionando?', critico: true },
-  { id: 'car_3', pergunta: 'Cinto de segurança em boas condições e utilizado corretamente?', critico: true },
-  { id: 'car_4', pergunta: 'Freios em boas condições?', critico: true },
-  { id: 'car_5', pergunta: 'Há vazamento de óleo ou fluidos?', critico: true },
+  { id: 'car_1', pergunta: 'Veículo próprio ou da companhia?', critico: false, informativo: true },
+  { id: 'car_2', pergunta: 'Veículo é utilizado como meio de trabalho?', critico: false, informativo: true },
+  { id: 'car_3', pergunta: 'CNH dentro da validade e categoria compatível?', critico: true },
+  { id: 'car_4', pergunta: 'Pneus em boas condições (calibrados, sem desgaste, incluindo step)?', critico: true },
+  { id: 'car_5', pergunta: 'Faróis, lanternas e setas funcionando?', critico: true },
+  { id: 'car_6', pergunta: 'Cinto de segurança em boas condições e utilizado por todos os ocupantes?', critico: true },
+  { id: 'car_7', pergunta: 'Freios em boas condições?', critico: true },
+  { id: 'car_8', pergunta: 'Há vazamento de óleo ou fluidos?', critico: true, invertido: true },
+  { id: 'car_9', pergunta: 'Limpadores de para-brisa funcionando?', critico: false },
+  { id: 'car_10', pergunta: 'Espelhos retrovisores presentes e ajustados?', critico: true },
+  { id: 'car_11', pergunta: 'Extintor de incêndio presente e dentro da validade?', critico: true },
+  { id: 'car_12', pergunta: 'Triângulo de sinalização presente?', critico: false },
+  { id: 'car_13', pergunta: 'Documentação do veículo em dia (CRLV)?', critico: true },
 ];
 
 export function getChecklist(tipo: VehicleType): ChecklistQuestion[] {
