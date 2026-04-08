@@ -55,19 +55,19 @@ export default function AdminDashboard() {
   }, [colaboradores, blitzList, planos]);
 
   const veiculoData = useMemo(() => {
-    const counts = { 'Motorista Truck': 0, 'Motorista VAN': 0, 'Outros': 0 };
-    colaboradores.forEach(c => {
-      const f = c.funcao.toLowerCase();
-      if (f.includes('truck') && !f.includes('van')) counts['Motorista Truck']++;
-      else if (f.includes('van')) counts['Motorista VAN']++;
-      else counts['Outros']++;
+    const counts = { 'Moto': 0, 'Carro/Truck': 0, 'Bicicleta': 0 };
+    blitzList.forEach(b => {
+      const v = b.veiculo_tipo?.toLowerCase() || '';
+      if (v.includes('moto')) counts['Moto']++;
+      else if (v.includes('carro') || v.includes('truck') || v.includes('van')) counts['Carro/Truck']++;
+      else if (v.includes('bicicleta') || v.includes('bike')) counts['Bicicleta']++;
     });
     return [
-      { name: 'Motorista Truck', value: counts['Motorista Truck'], fill: 'hsl(217, 91%, 60%)' },
-      { name: 'Motorista VAN', value: counts['Motorista VAN'], fill: 'hsl(38, 92%, 50%)' },
-      { name: 'Outros', value: counts['Outros'], fill: 'hsl(142, 71%, 45%)' },
+      { name: 'Moto', value: counts['Moto'], fill: 'hsl(152, 72%, 30%)' },
+      { name: 'Carro/Truck', value: counts['Carro/Truck'], fill: 'hsl(217, 91%, 60%)' },
+      { name: 'Bicicleta', value: counts['Bicicleta'], fill: 'hsl(38, 92%, 50%)' },
     ];
-  }, [colaboradores]);
+  }, [blitzList]);
 
   if (isLoading) {
     return (
