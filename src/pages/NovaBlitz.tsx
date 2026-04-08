@@ -85,10 +85,128 @@ export default function NovaBlitz() {
     return true;
   };
 
-  const finalizar = () => {
-    toast({ title: 'Blitz registrada com sucesso!' });
-    navigate('/portal');
-  };
+  const queryClient = useQueryClient();
+  const [salvando, setSalvando] = useState(false);
+
+  const finalizar = useCallback(async () => {
+    if (!colaborador) return;
+    setSalvando(true);
+
+    try {
+      const naoConformes = checklist.filter(q => respostas[q.id] === 'nao');
+      const statusFinal = (naoConformes.length > 0 || temAnomalia)
+        ? (naoConformes.some(q => q.critico) || temAnomalia ? 'nao_conforme' : 'conforme_observacoes')
+        : 'conforme';
+
+      // 1. Insert blitz
+      const { data: blitzData, error: blitzErr } = await supabase
+        .from('blitz' as any)
+        .insert({
+          data: new Date().toISOString().slice(0, 10),
+          lideranca_nome: 'Liderança', // TODO: use real leader name
+          colaborador_id: colaborador.id,
+          colaborador_nome: colaborador.nome,
+          colaborador_cpf: colaborador.cpf,
+          veiculo_tipo: veiculoTipo,
+          status: statusFinal,
+          observacoes: temAnomalia ? descAnomalia : '',
+        } as any)
+        .select('id')
+        .single();
+
+      if (blitzErr) throw blitzErr;
+      const blitzId = (blitzData as any).id;
+
+      // 2. Insert blitz_itens
+      const itens = checklist.map(q => ({
+        blitz_id: blitzId,
+        pergunta: q.pergunta,
+        resposta: respostas[q.id] || 'na',
+        observacao: '',
+        critico: q.critico,
+      }));
+
+      const { error: itensErr } = await supabase
+        .from('blitz_itens' as any)
+        .insert(itens as any);
+
+      if (itensErr) throw itensErr;
+
+      // 3. Update colaborador data_ultima_blitz
+      const { error: updateErr } = await supabase
+        .from('colaboradores' as any)
+        .update({ data_ultima_blitz: new Date().toISOString().slice(0, 10), updated_at: new Date().toISOString() } as any)
+        .eq('id', colaborador.id);
+
+      if (updateErr) throw updateErr;
+
+      // 4. Auto-generate planos de ação for non-conformities
+      const planosToInsert: any[] = [];
+      const now = new Date();
+
+      naoConformes.forEach((q, idx) => {
+        const codigo = `PA-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${String(idx + 1).padStart(3, '0')}`;
+        const prazo = new Date(now);
+        prazo.setDate(prazo.getDate() + (q.critico ? 30 : 60));
+
+        planosToInsert.push({
+          codigo,
+          blitz_id: blitzId,
+          colaborador_nome: colaborador.nome,
+          colaborador_cpf: colaborador.cpf,
+          veiculo_tipo: veiculoTipo,
+          descricao_anomalia: `Não conformidade: ${q.pergunta}`,
+          acao_corretiva: `Corrigir: ${q.pergunta}`,
+          prazo: prazo.toISOString().slice(0, 10),
+          prioridade: q.critico ? 'alta' : 'media',
+          status: 'aberto',
+          responsavel: colaborador.nome,
+        });
+      });
+
+      if (temAnomalia && descAnomalia) {
+        const codigo = `PA-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${String(planosToInsert.length + 1).padStart(3, '0')}`;
+        const prazo = new Date(now);
+        prazo.setDate(prazo.getDate() + 30);
+
+        planosToInsert.push({
+          codigo,
+          blitz_id: blitzId,
+          colaborador_nome: colaborador.nome,
+          colaborador_cpf: colaborador.cpf,
+          veiculo_tipo: veiculoTipo,
+          descricao_anomalia: descAnomalia,
+          acao_corretiva: `Ação corretiva para: ${descAnomalia}`,
+          prazo: prazo.toISOString().slice(0, 10),
+          prioridade: 'critica',
+          status: 'aberto',
+          responsavel: colaborador.nome,
+        });
+      }
+
+      if (planosToInsert.length > 0) {
+        const { error: planosErr } = await supabase
+          .from('planos_acao' as any)
+          .insert(planosToInsert as any);
+
+        if (planosErr) throw planosErr;
+      }
+
+      // Invalidate caches
+      queryClient.invalidateQueries({ queryKey: ['blitz'] });
+      queryClient.invalidateQueries({ queryKey: ['planos_acao'] });
+      queryClient.invalidateQueries({ queryKey: ['colaboradores'] });
+
+      const planosMsg = planosToInsert.length > 0 ? ` · ${planosToInsert.length} plano(s) de ação gerado(s)` : '';
+      toast({ title: `Blitz registrada com sucesso!${planosMsg}` });
+      navigate('/portal');
+    } catch (err: any) {
+      console.error('Erro ao salvar blitz:', err);
+      toast({ title: 'Erro ao salvar blitz', description: err?.message || 'Tente novamente', variant: 'destructive' });
+    } finally {
+      setSalvando(false);
+    }
+  }, [colaborador, checklist, respostas, veiculoTipo, temAnomalia, descAnomalia, navigate, queryClient]);
 
   const vehicleIcons = {
     bicicleta: Bike,
