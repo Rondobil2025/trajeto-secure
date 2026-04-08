@@ -57,7 +57,6 @@ export function PhotoCapture({ label, folder, onCapture, currentUrl, onRemove, c
         ref={inputRef}
         type="file"
         accept={accept}
-        capture="environment"
         className="hidden"
         onChange={handleChange}
       />
