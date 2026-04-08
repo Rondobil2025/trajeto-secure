@@ -118,6 +118,36 @@ export type Database = {
           },
         ]
       }
+      colaborador_mensal: {
+        Row: {
+          ano: number
+          colaborador_id: string
+          created_at: string
+          id: string
+          mes: number
+          observacao: string | null
+          tipo_transporte: string
+        }
+        Insert: {
+          ano?: number
+          colaborador_id: string
+          created_at?: string
+          id?: string
+          mes: number
+          observacao?: string | null
+          tipo_transporte?: string
+        }
+        Update: {
+          ano?: number
+          colaborador_id?: string
+          created_at?: string
+          id?: string
+          mes?: number
+          observacao?: string | null
+          tipo_transporte?: string
+        }
+        Relationships: []
+      }
       colaboradores: {
         Row: {
           aderencia: number | null
@@ -130,6 +160,8 @@ export type Database = {
           contato: string | null
           cpf: string
           created_at: string
+          curso_direcao_defensiva: boolean | null
+          curso_direcao_defensiva_data: string | null
           data_nascimento: string | null
           data_ultima_blitz: string | null
           email: string | null
@@ -154,6 +186,8 @@ export type Database = {
           contato?: string | null
           cpf: string
           created_at?: string
+          curso_direcao_defensiva?: boolean | null
+          curso_direcao_defensiva_data?: string | null
           data_nascimento?: string | null
           data_ultima_blitz?: string | null
           email?: string | null
@@ -178,6 +212,8 @@ export type Database = {
           contato?: string | null
           cpf?: string
           created_at?: string
+          curso_direcao_defensiva?: boolean | null
+          curso_direcao_defensiva_data?: string | null
           data_nascimento?: string | null
           data_ultima_blitz?: string | null
           email?: string | null
