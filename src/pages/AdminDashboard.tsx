@@ -120,7 +120,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="rounded-xl border bg-card p-5">
-              <h3 className="font-semibold font-display mb-4">Distribuição por Função</h3>
+              <h3 className="font-semibold font-display mb-4">Blitz por Tipo de Veículo</h3>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie data={veiculoData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} label>
