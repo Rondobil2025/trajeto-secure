@@ -14,6 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
+      blitz: {
+        Row: {
+          colaborador_cpf: string
+          colaborador_id: string | null
+          colaborador_nome: string
+          created_at: string
+          data: string
+          id: string
+          lideranca_id: string | null
+          lideranca_nome: string
+          observacoes: string | null
+          status: string
+          veiculo_tipo: string
+        }
+        Insert: {
+          colaborador_cpf?: string
+          colaborador_id?: string | null
+          colaborador_nome?: string
+          created_at?: string
+          data?: string
+          id?: string
+          lideranca_id?: string | null
+          lideranca_nome?: string
+          observacoes?: string | null
+          status?: string
+          veiculo_tipo?: string
+        }
+        Update: {
+          colaborador_cpf?: string
+          colaborador_id?: string | null
+          colaborador_nome?: string
+          created_at?: string
+          data?: string
+          id?: string
+          lideranca_id?: string | null
+          lideranca_nome?: string
+          observacoes?: string | null
+          status?: string
+          veiculo_tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blitz_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blitz_lideranca_id_fkey"
+            columns: ["lideranca_id"]
+            isOneToOne: false
+            referencedRelation: "liderancas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blitz_itens: {
+        Row: {
+          blitz_id: string
+          critico: boolean
+          id: string
+          observacao: string | null
+          pergunta: string
+          resposta: string
+        }
+        Insert: {
+          blitz_id: string
+          critico?: boolean
+          id?: string
+          observacao?: string | null
+          pergunta: string
+          resposta?: string
+        }
+        Update: {
+          blitz_id?: string
+          critico?: boolean
+          id?: string
+          observacao?: string | null
+          pergunta?: string
+          resposta?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blitz_itens_blitz_id_fkey"
+            columns: ["blitz_id"]
+            isOneToOne: false
+            referencedRelation: "blitz"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       colaboradores: {
         Row: {
           aderencia: number | null
@@ -88,6 +180,152 @@ export type Database = {
           veiculo_utilizado?: string | null
         }
         Relationships: []
+      }
+      liderancas: {
+        Row: {
+          ativo: boolean
+          cpf: string
+          created_at: string
+          email: string | null
+          id: string
+          nome: string
+          senha_hash: string | null
+          setor: string
+        }
+        Insert: {
+          ativo?: boolean
+          cpf: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          nome: string
+          senha_hash?: string | null
+          setor?: string
+        }
+        Update: {
+          ativo?: boolean
+          cpf?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          nome?: string
+          senha_hash?: string | null
+          setor?: string
+        }
+        Relationships: []
+      }
+      planos_acao: {
+        Row: {
+          acao_corretiva: string
+          blitz_id: string | null
+          codigo: string
+          colaborador_cpf: string
+          colaborador_nome: string
+          created_at: string
+          data_conclusao: string | null
+          descricao_anomalia: string
+          evidencia_url: string | null
+          id: string
+          prazo: string
+          prioridade: string
+          responsavel: string
+          status: string
+          veiculo_tipo: string
+        }
+        Insert: {
+          acao_corretiva?: string
+          blitz_id?: string | null
+          codigo: string
+          colaborador_cpf?: string
+          colaborador_nome?: string
+          created_at?: string
+          data_conclusao?: string | null
+          descricao_anomalia?: string
+          evidencia_url?: string | null
+          id?: string
+          prazo: string
+          prioridade?: string
+          responsavel?: string
+          status?: string
+          veiculo_tipo?: string
+        }
+        Update: {
+          acao_corretiva?: string
+          blitz_id?: string | null
+          codigo?: string
+          colaborador_cpf?: string
+          colaborador_nome?: string
+          created_at?: string
+          data_conclusao?: string | null
+          descricao_anomalia?: string
+          evidencia_url?: string | null
+          id?: string
+          prazo?: string
+          prioridade?: string
+          responsavel?: string
+          status?: string
+          veiculo_tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planos_acao_blitz_id_fkey"
+            columns: ["blitz_id"]
+            isOneToOne: false
+            referencedRelation: "blitz"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      termos_ciencia: {
+        Row: {
+          assinado_em: string | null
+          assinatura_url: string | null
+          blitz_id: string | null
+          colaborador_cpf: string
+          colaborador_nome: string
+          created_at: string
+          descricao: string
+          id: string
+          plano_acao_id: string | null
+        }
+        Insert: {
+          assinado_em?: string | null
+          assinatura_url?: string | null
+          blitz_id?: string | null
+          colaborador_cpf?: string
+          colaborador_nome?: string
+          created_at?: string
+          descricao?: string
+          id?: string
+          plano_acao_id?: string | null
+        }
+        Update: {
+          assinado_em?: string | null
+          assinatura_url?: string | null
+          blitz_id?: string | null
+          colaborador_cpf?: string
+          colaborador_nome?: string
+          created_at?: string
+          descricao?: string
+          id?: string
+          plano_acao_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "termos_ciencia_blitz_id_fkey"
+            columns: ["blitz_id"]
+            isOneToOne: false
+            referencedRelation: "blitz"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "termos_ciencia_plano_acao_id_fkey"
+            columns: ["plano_acao_id"]
+            isOneToOne: false
+            referencedRelation: "planos_acao"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

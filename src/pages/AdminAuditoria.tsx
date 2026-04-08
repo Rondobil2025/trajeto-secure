@@ -4,18 +4,23 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF } from '@/lib/types';
 import { Shield, AlertTriangle, FileWarning, ShieldAlert, CheckCircle2, Loader2 } from 'lucide-react';
 import { useColaboradores } from '@/hooks/useColaboradores';
+import { usePlanosAcao } from '@/hooks/usePlanosAcao';
 import { useMemo } from 'react';
 
 export default function AdminAuditoria() {
-  const { data: colaboradores = [], isLoading } = useColaboradores();
+  const { data: colaboradores = [], isLoading: loadingColab } = useColaboradores();
+  const { data: planos = [], isLoading: loadingPlanos } = usePlanosAcao();
 
-  const { cnhVencidas, semBlitz, aderenciaGeral } = useMemo(() => {
+  const isLoading = loadingColab || loadingPlanos;
+
+  const { cnhVencidas, semBlitz, aderenciaGeral, planosVencidos } = useMemo(() => {
     const cnhVencidas = colaboradores.filter(c => c.cnh_status === 'vencida');
     const semBlitz = colaboradores.filter(c => !c.data_ultima_blitz);
     const totalAd = colaboradores.reduce((s, c) => s + c.aderencia, 0);
     const aderenciaGeral = colaboradores.length > 0 ? Math.round(totalAd / colaboradores.length) : 0;
-    return { cnhVencidas, semBlitz, aderenciaGeral };
-  }, [colaboradores]);
+    const planosVencidos = planos.filter(p => p.status === 'vencido');
+    return { cnhVencidas, semBlitz, aderenciaGeral, planosVencidos };
+  }, [colaboradores, planos]);
 
   if (isLoading) {
     return (
@@ -47,10 +52,9 @@ export default function AdminAuditoria() {
             <KpiCard title="Conformidade Geral" value={`${aderenciaGeral}%`} icon={CheckCircle2} variant={aderenciaGeral >= 80 ? 'ok' : 'warning'} />
             <KpiCard title="CNH Vencidas" value={cnhVencidas.length} icon={ShieldAlert} variant="danger" />
             <KpiCard title="Sem Blitz" value={semBlitz.length} icon={AlertTriangle} variant="warning" />
-            <KpiCard title="Planos Vencidos" value={0} icon={FileWarning} variant="danger" />
+            <KpiCard title="Planos Vencidos" value={planosVencidos.length} icon={FileWarning} variant="danger" />
           </div>
 
-          {/* Pendências Críticas */}
           <div className="rounded-xl border bg-card p-5">
             <h3 className="font-semibold font-display mb-4 flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-status-danger" /> Pendências Críticas
@@ -63,6 +67,15 @@ export default function AdminAuditoria() {
                     <p className="text-xs text-muted-foreground">{formatCPF(c.cpf)} · {c.setor}</p>
                   </div>
                   <StatusBadge variant="danger">CNH Vencida</StatusBadge>
+                </div>
+              ))}
+              {planosVencidos.map(p => (
+                <div key={p.id} className="flex items-center justify-between rounded-lg border border-status-danger/20 bg-status-danger/5 p-3">
+                  <div>
+                    <p className="text-sm font-medium">{p.colaborador_nome}</p>
+                    <p className="text-xs text-muted-foreground">{p.codigo} · {p.descricao_anomalia}</p>
+                  </div>
+                  <StatusBadge variant="danger">Plano Vencido</StatusBadge>
                 </div>
               ))}
               {semBlitz.slice(0, 10).map(c => (
