@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      colaboradores: {
+        Row: {
+          aderencia: number | null
+          admissao: string
+          ativo: boolean
+          cnh_categoria: string | null
+          cnh_numero: string | null
+          cnh_status: string | null
+          cnh_validade: string | null
+          contato: string | null
+          cpf: string
+          created_at: string
+          data_nascimento: string | null
+          data_ultima_blitz: string | null
+          email: string | null
+          funcao: string
+          genero: string | null
+          id: string
+          matricula: string
+          nome: string
+          pilar: string | null
+          setor: string
+          updated_at: string
+          veiculo_utilizado: string | null
+        }
+        Insert: {
+          aderencia?: number | null
+          admissao: string
+          ativo?: boolean
+          cnh_categoria?: string | null
+          cnh_numero?: string | null
+          cnh_status?: string | null
+          cnh_validade?: string | null
+          contato?: string | null
+          cpf: string
+          created_at?: string
+          data_nascimento?: string | null
+          data_ultima_blitz?: string | null
+          email?: string | null
+          funcao: string
+          genero?: string | null
+          id?: string
+          matricula: string
+          nome: string
+          pilar?: string | null
+          setor: string
+          updated_at?: string
+          veiculo_utilizado?: string | null
+        }
+        Update: {
+          aderencia?: number | null
+          admissao?: string
+          ativo?: boolean
+          cnh_categoria?: string | null
+          cnh_numero?: string | null
+          cnh_status?: string | null
+          cnh_validade?: string | null
+          contato?: string | null
+          cpf?: string
+          created_at?: string
+          data_nascimento?: string | null
+          data_ultima_blitz?: string | null
+          email?: string | null
+          funcao?: string
+          genero?: string | null
+          id?: string
+          matricula?: string
+          nome?: string
+          pilar?: string | null
+          setor?: string
+          updated_at?: string
+          veiculo_utilizado?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
