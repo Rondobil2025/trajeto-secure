@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, Camera, Bike, Car, Truck, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Camera, Bike, Car, Truck, AlertTriangle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { StatusBadge } from '@/components/StatusBadge';
-import { MOCK_COLABORADORES, MOCK_LIDERANCAS } from '@/lib/mock-data';
 import { formatCPF, cleanCPF, getChecklist, getVehicleLabel, type VehicleType, type CheckAnswer } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { MobileNav } from '@/components/MobileNav';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import type { ColaboradorDB } from '@/hooks/useColaboradores';
 
 const STEPS = ['Identificação', 'Colaborador', 'Veículo', 'Checklist', 'Anomalias', 'Revisão'];
 
@@ -20,7 +21,8 @@ export default function NovaBlitz() {
   const [senha, setSenha] = useState('');
   const [liderValidada, setLiderValidada] = useState(false);
   const [cpfColab, setCpfColab] = useState('');
-  const [colaborador, setColaborador] = useState<typeof MOCK_COLABORADORES[0] | null>(null);
+  const [colaborador, setColaborador] = useState<ColaboradorDB | null>(null);
+  const [buscando, setBuscando] = useState(false);
   const [veiculoTipo, setVeiculoTipo] = useState<VehicleType>('carro');
   const [respostas, setRespostas] = useState<Record<string, CheckAnswer>>({});
   const [temAnomalia, setTemAnomalia] = useState(false);
@@ -28,24 +30,47 @@ export default function NovaBlitz() {
 
   const validarLider = () => {
     const cpf = cleanCPF(cpfLider);
-    const lider = MOCK_LIDERANCAS.find(l => l.cpf === cpf);
-    if (lider && senha === '1234') {
+    // TODO: validate against liderancas table
+    if (cpf.length === 11 && senha === '1234') {
       setLiderValidada(true);
       setStep(1);
-      toast({ title: `Bem-vindo, ${lider.nome}!` });
+      toast({ title: 'Bem-vindo!' });
     } else {
       toast({ title: 'Credenciais inválidas', variant: 'destructive' });
     }
   };
 
-  const buscarColab = () => {
+  const buscarColab = async () => {
     const cpf = cleanCPF(cpfColab);
-    const c = MOCK_COLABORADORES.find(co => co.cpf === cpf);
-    if (c) {
-      setColaborador(c);
-      setVeiculoTipo(c.veiculo_utilizado);
-    } else {
-      toast({ title: 'Colaborador não encontrado', variant: 'destructive' });
+    if (cpf.length < 11) {
+      toast({ title: 'CPF incompleto', variant: 'destructive' });
+      return;
+    }
+    setBuscando(true);
+    try {
+      const { data, error } = await supabase
+        .from('colaboradores' as any)
+        .select('*')
+        .eq('cpf', cpf)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (data) {
+        const c = data as any as ColaboradorDB;
+        setColaborador(c);
+        // Try to guess vehicle type from function name
+        const f = c.funcao.toLowerCase();
+        if (f.includes('truck') || f.includes('carreteiro')) setVeiculoTipo('carro');
+        else if (f.includes('van')) setVeiculoTipo('carro');
+        else if (f.includes('moto')) setVeiculoTipo('moto');
+        else setVeiculoTipo('bicicleta');
+      } else {
+        toast({ title: 'Colaborador não encontrado', variant: 'destructive' });
+      }
+    } catch {
+      toast({ title: 'Erro ao buscar colaborador', variant: 'destructive' });
+    } finally {
+      setBuscando(false);
     }
   };
 
@@ -113,7 +138,7 @@ export default function NovaBlitz() {
             <Button onClick={validarLider} className="w-full h-12 text-base">
               Entrar e Continuar
             </Button>
-            <p className="text-xs text-muted-foreground text-center">Use CPF: 123.456.789-01 / Senha: 1234</p>
+            <p className="text-xs text-muted-foreground text-center">Digite qualquer CPF válido com 11 dígitos / Senha: 1234</p>
           </div>
         )}
 
@@ -130,7 +155,9 @@ export default function NovaBlitz() {
                   inputMode="numeric"
                   className="text-lg h-12"
                 />
-                <Button onClick={buscarColab} variant="outline" className="h-12 px-6">Buscar</Button>
+                <Button onClick={buscarColab} variant="outline" className="h-12 px-6" disabled={buscando}>
+                  {buscando ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Buscar'}
+                </Button>
               </div>
             </div>
 
@@ -150,7 +177,7 @@ export default function NovaBlitz() {
                   <div><span className="text-muted-foreground">Matrícula:</span> {colaborador.matricula}</div>
                   <div><span className="text-muted-foreground">Função:</span> {colaborador.funcao}</div>
                   <div><span className="text-muted-foreground">Setor:</span> {colaborador.setor}</div>
-                  <div><span className="text-muted-foreground">Veículo:</span> {getVehicleLabel(colaborador.veiculo_utilizado)}</div>
+                  <div><span className="text-muted-foreground">Admissão:</span> {colaborador.admissao}</div>
                   <div><span className="text-muted-foreground">Última Blitz:</span> {colaborador.data_ultima_blitz || 'Nunca'}</div>
                   <div><span className="text-muted-foreground">Aderência:</span> {colaborador.aderencia}%</div>
                 </div>
@@ -285,7 +312,6 @@ export default function NovaBlitz() {
               </div>
             </div>
 
-            {/* Status */}
             {Object.values(respostas).some(r => r === 'nao') || temAnomalia ? (
               <div className="rounded-xl bg-status-danger/10 border border-status-danger/30 p-4 text-center">
                 <StatusBadge variant="danger" className="text-sm">Não Conforme</StatusBadge>

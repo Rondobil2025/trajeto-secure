@@ -1,17 +1,80 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
 import { KpiCard } from '@/components/KpiCard';
-import { DASHBOARD_STATS, CHART_BLITZ_MES, CHART_ADERENCIA_SETOR, CHART_VEICULOS } from '@/lib/mock-data';
+import { useColaboradores } from '@/hooks/useColaboradores';
 import {
   Users, ClipboardCheck, AlertTriangle, TrendingUp, Car, Bike, Truck,
-  FileWarning, ShieldAlert, ClipboardList
+  FileWarning, ShieldAlert, ClipboardList, Loader2
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
+import { useMemo } from 'react';
 
 export default function AdminDashboard() {
-  const s = DASHBOARD_STATS;
+  const { data: colaboradores = [], isLoading } = useColaboradores();
+
+  const stats = useMemo(() => {
+    const total = colaboradores.length;
+    const cnhVencidas = colaboradores.filter(c => c.cnh_status === 'vencida').length;
+    const semCnh = colaboradores.filter(c => c.cnh_status === 'sem_cnh').length;
+
+    // Count by sector
+    const porSetor: Record<string, number> = {};
+    colaboradores.forEach(c => {
+      porSetor[c.setor] = (porSetor[c.setor] || 0) + 1;
+    });
+
+    // Count by vehicle-related function names
+    const motoristas = colaboradores.filter(c =>
+      c.funcao.toLowerCase().includes('motorista') || c.funcao.toLowerCase().includes('truck') || c.funcao.toLowerCase().includes('van')
+    ).length;
+
+    // Pendentes (sem blitz ou vencida)
+    const pendentes = colaboradores.filter(c => {
+      if (!c.data_ultima_blitz) return true;
+      const diff = (Date.now() - new Date(c.data_ultima_blitz).getTime()) / (1000 * 60 * 60 * 24);
+      return diff > 90; // simplified
+    }).length;
+
+    // Aderência geral
+    const totalAderencia = colaboradores.reduce((sum, c) => sum + c.aderencia, 0);
+    const aderenciaGeral = total > 0 ? Math.round(totalAderencia / total) : 0;
+
+    // Chart data - by sector
+    const setorData = Object.entries(porSetor).map(([setor, count]) => ({
+      setor,
+      total: count,
+    }));
+
+    return { total, cnhVencidas, semCnh, motoristas, pendentes, aderenciaGeral, setorData };
+  }, [colaboradores]);
+
+  const veiculoData = useMemo(() => {
+    const counts = { 'Motorista Truck': 0, 'Motorista VAN': 0, 'Outros': 0 };
+    colaboradores.forEach(c => {
+      const f = c.funcao.toLowerCase();
+      if (f.includes('truck') && !f.includes('van')) counts['Motorista Truck']++;
+      else if (f.includes('van')) counts['Motorista VAN']++;
+      else counts['Outros']++;
+    });
+    return [
+      { name: 'Motorista Truck', value: counts['Motorista Truck'], fill: 'hsl(217, 91%, 60%)' },
+      { name: 'Motorista VAN', value: counts['Motorista VAN'], fill: 'hsl(38, 92%, 50%)' },
+      { name: 'Outros', value: counts['Outros'], fill: 'hsl(142, 71%, 45%)' },
+    ];
+  }, [colaboradores]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen">
+        <AdminSidebar />
+        <main className="flex-1 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -25,33 +88,27 @@ export default function AdminDashboard() {
         <div className="px-4 md:px-8 py-6 space-y-8 -mt-4">
           {/* KPIs */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-            <KpiCard title="Colaboradores" value={s.totalColaboradores} icon={Users} />
-            <KpiCard title="Blitz no Mês" value={s.blitzMes} icon={ClipboardCheck} />
-            <KpiCard title="Pendentes" value={s.pendentes} icon={AlertTriangle} variant="warning" />
-            <KpiCard title="Aderência" value={`${s.aderenciaGeral}%`} icon={TrendingUp} variant={s.aderenciaGeral >= 80 ? 'ok' : 'warning'} />
-            <KpiCard title="CNH Vencidas" value={s.cnhVencidas} icon={ShieldAlert} variant="danger" />
+            <KpiCard title="Colaboradores" value={stats.total} icon={Users} />
+            <KpiCard title="Motoristas" value={stats.motoristas} icon={Truck} />
+            <KpiCard title="Pendentes" value={stats.pendentes} icon={AlertTriangle} variant="warning" />
+            <KpiCard title="Aderência" value={`${stats.aderenciaGeral}%`} icon={TrendingUp} variant={stats.aderenciaGeral >= 80 ? 'ok' : 'warning'} />
+            <KpiCard title="CNH Vencidas" value={stats.cnhVencidas} icon={ShieldAlert} variant="danger" />
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <KpiCard title="Carros" value={s.porVeiculo.carro} icon={Car} />
-            <KpiCard title="Motos" value={s.porVeiculo.moto} icon={Truck} />
-            <KpiCard title="Bicicletas" value={s.porVeiculo.bicicleta} icon={Bike} />
-            <KpiCard title="Sem CNH" value={s.semCnh} icon={FileWarning} variant="danger" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <KpiCard title="Planos Abertos" value={s.planosAbertos} icon={ClipboardList} variant="warning" />
-            <KpiCard title="Planos Vencidos" value={s.planosVencidos} icon={AlertTriangle} variant="danger" />
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <KpiCard title="Sem CNH" value={stats.semCnh} icon={FileWarning} variant="danger" />
+            <KpiCard title="Planos Abertos" value={0} icon={ClipboardList} variant="warning" />
+            <KpiCard title="Planos Vencidos" value={0} icon={AlertTriangle} variant="danger" />
           </div>
 
           {/* Charts */}
           <div className="grid md:grid-cols-2 gap-6">
             <div className="rounded-xl border bg-card p-5">
-              <h3 className="font-semibold font-display mb-4">Blitz por Mês</h3>
+              <h3 className="font-semibold font-display mb-4">Colaboradores por Setor</h3>
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={CHART_BLITZ_MES}>
+                <BarChart data={stats.setorData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(214 20% 90%)" />
-                  <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
+                  <XAxis dataKey="setor" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
                   <Bar dataKey="total" fill="hsl(220, 70%, 25%)" radius={[4, 4, 0, 0]} />
@@ -60,25 +117,12 @@ export default function AdminDashboard() {
             </div>
 
             <div className="rounded-xl border bg-card p-5">
-              <h3 className="font-semibold font-display mb-4">Aderência por Setor</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={CHART_ADERENCIA_SETOR} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(214 20% 90%)" />
-                  <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 12 }} />
-                  <YAxis dataKey="setor" type="category" width={90} tick={{ fontSize: 12 }} />
-                  <Tooltip />
-                  <Bar dataKey="aderencia" fill="hsl(217, 91%, 60%)" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="rounded-xl border bg-card p-5">
-              <h3 className="font-semibold font-display mb-4">Distribuição por Veículo</h3>
+              <h3 className="font-semibold font-display mb-4">Distribuição por Função</h3>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
-                  <Pie data={CHART_VEICULOS} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} label>
-                    {CHART_VEICULOS.map((_, i) => (
-                      <Cell key={i} fill={CHART_VEICULOS[i].fill} />
+                  <Pie data={veiculoData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} label>
+                    {veiculoData.map((_, i) => (
+                      <Cell key={i} fill={veiculoData[i].fill} />
                     ))}
                   </Pie>
                   <Legend />
