@@ -502,32 +502,50 @@ export default function NovaBlitz() {
         {step === 3 && (
           <div className="space-y-3 animate-fade-in">
             <p className="text-sm text-muted-foreground">Checklist — {getVehicleLabel(veiculoTipo)}</p>
-            {checklist.map(q => (
-              <div key={q.id} className="rounded-xl border bg-card p-4">
-                <p className="text-sm font-medium mb-3">
-                  {q.pergunta}
-                  {q.critico && <span className="text-status-danger ml-1">*</span>}
-                </p>
-                <div className="flex gap-2">
-                  {(['sim', 'nao', 'na'] as CheckAnswer[]).map(ans => (
-                    <button
-                      key={ans}
-                      onClick={() => setRespostas(prev => ({ ...prev, [q.id]: ans }))}
-                      className={cn(
-                        'flex-1 rounded-lg border py-2.5 text-sm font-medium transition-all',
-                        respostas[q.id] === ans
-                          ? ans === 'sim' ? 'border-status-ok bg-status-ok/10 text-status-ok'
-                            : ans === 'nao' ? 'border-status-danger bg-status-danger/10 text-status-danger'
-                            : 'border-primary bg-primary/10 text-primary'
-                          : 'border-border text-muted-foreground'
-                      )}
-                    >
-                      {ans === 'sim' ? 'Sim' : ans === 'nao' ? 'Não' : 'N/A'}
-                    </button>
-                  ))}
+            {checklist.map(q => {
+              const isInvertido = q.invertido === true;
+              const isInformativo = q.informativo === true;
+
+              const getButtonColor = (ans: CheckAnswer) => {
+                if (respostas[q.id] !== ans) return 'border-border text-muted-foreground';
+                if (ans === 'na') return 'border-primary bg-primary/10 text-primary';
+                if (isInformativo) return 'border-primary bg-primary/10 text-primary';
+                // Para perguntas invertidas: Sim=vermelho, Não=verde
+                // Para perguntas normais: Sim=verde, Não=vermelho
+                if (isInvertido) {
+                  return ans === 'sim'
+                    ? 'border-status-danger bg-status-danger/10 text-status-danger'
+                    : 'border-status-ok bg-status-ok/10 text-status-ok';
+                }
+                return ans === 'sim'
+                  ? 'border-status-ok bg-status-ok/10 text-status-ok'
+                  : 'border-status-danger bg-status-danger/10 text-status-danger';
+              };
+
+              return (
+                <div key={q.id} className="rounded-xl border bg-card p-4">
+                  <p className="text-sm font-medium mb-3">
+                    {q.pergunta}
+                    {q.critico && <span className="text-status-danger ml-1">*</span>}
+                    {isInformativo && <span className="text-muted-foreground ml-1 text-xs">(informativo)</span>}
+                  </p>
+                  <div className="flex gap-2">
+                    {(['sim', 'nao', 'na'] as CheckAnswer[]).map(ans => (
+                      <button
+                        key={ans}
+                        onClick={() => setRespostas(prev => ({ ...prev, [q.id]: ans }))}
+                        className={cn(
+                          'flex-1 rounded-lg border py-2.5 text-sm font-medium transition-all',
+                          getButtonColor(ans)
+                        )}
+                      >
+                        {ans === 'sim' ? 'Sim' : ans === 'nao' ? 'Não' : 'N/A'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
