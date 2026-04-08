@@ -20,6 +20,7 @@ import AdminTermos from "./pages/AdminTermos";
 import AdminImportar from "./pages/AdminImportar";
 import AdminRelatorios from "./pages/AdminRelatorios";
 import AdminConfiguracoes from "./pages/AdminConfiguracoes";
+import AdminChecklist from "./pages/AdminChecklist";
 
 const queryClient = new QueryClient();
 
