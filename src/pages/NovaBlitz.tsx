@@ -107,13 +107,17 @@ export default function NovaBlitz() {
         .from('blitz' as any)
         .insert({
           data: new Date().toISOString().slice(0, 10),
-          lideranca_nome: 'Liderança', // TODO: use real leader name
+          lideranca_nome: 'Liderança',
           colaborador_id: colaborador.id,
           colaborador_nome: colaborador.nome,
           colaborador_cpf: colaborador.cpf,
           veiculo_tipo: veiculoTipo,
           status: statusFinal,
           observacoes: temAnomalia ? descAnomalia : '',
+          foto_veiculo_url: fotoVeiculo,
+          foto_cnh_url: fotoCnh,
+          foto_placa_url: fotoPlaca,
+          fotos_anomalia_urls: fotosAnomalia,
         } as any)
         .select('id')
         .single();
