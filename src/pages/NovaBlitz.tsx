@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, Camera, Bike, Car, Truck, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Camera, Bike, Car, Truck, AlertTriangle, Loader2, ImageIcon } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,8 +12,9 @@ import { MobileNav } from '@/components/MobileNav';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import type { ColaboradorDB } from '@/hooks/useColaboradores';
+import { PhotoCapture, MultiPhotoCapture } from '@/components/PhotoCapture';
 
-const STEPS = ['Identificação', 'Colaborador', 'Veículo', 'Checklist', 'Anomalias', 'Revisão'];
+const STEPS = ['Identificação', 'Colaborador', 'Veículo & Fotos', 'Checklist', 'Anomalias', 'Revisão'];
 
 export default function NovaBlitz() {
   const navigate = useNavigate();
@@ -28,7 +29,10 @@ export default function NovaBlitz() {
   const [respostas, setRespostas] = useState<Record<string, CheckAnswer>>({});
   const [temAnomalia, setTemAnomalia] = useState(false);
   const [descAnomalia, setDescAnomalia] = useState('');
-
+  const [fotoVeiculo, setFotoVeiculo] = useState<string | null>(null);
+  const [fotoCnh, setFotoCnh] = useState<string | null>(null);
+  const [fotoPlaca, setFotoPlaca] = useState<string | null>(null);
+  const [fotosAnomalia, setFotosAnomalia] = useState<string[]>([]);
   const validarLider = () => {
     const cpf = cleanCPF(cpfLider);
     // TODO: validate against liderancas table
@@ -103,13 +107,17 @@ export default function NovaBlitz() {
         .from('blitz' as any)
         .insert({
           data: new Date().toISOString().slice(0, 10),
-          lideranca_nome: 'Liderança', // TODO: use real leader name
+          lideranca_nome: 'Liderança',
           colaborador_id: colaborador.id,
           colaborador_nome: colaborador.nome,
           colaborador_cpf: colaborador.cpf,
           veiculo_tipo: veiculoTipo,
           status: statusFinal,
           observacoes: temAnomalia ? descAnomalia : '',
+          foto_veiculo_url: fotoVeiculo,
+          foto_cnh_url: fotoCnh,
+          foto_placa_url: fotoPlaca,
+          fotos_anomalia_urls: fotosAnomalia,
         } as any)
         .select('id')
         .single();
@@ -206,7 +214,7 @@ export default function NovaBlitz() {
     } finally {
       setSalvando(false);
     }
-  }, [colaborador, checklist, respostas, veiculoTipo, temAnomalia, descAnomalia, navigate, queryClient]);
+  }, [colaborador, checklist, respostas, veiculoTipo, temAnomalia, descAnomalia, fotoVeiculo, fotoCnh, fotoPlaca, fotosAnomalia, navigate, queryClient]);
 
   const vehicleIcons = {
     bicicleta: Bike,
@@ -313,28 +321,64 @@ export default function NovaBlitz() {
 
         {/* Step 2: Tipo de veículo */}
         {step === 2 && (
-          <div className="space-y-4 animate-fade-in">
-            <Label>Selecione o tipo de veículo</Label>
-            <div className="grid grid-cols-3 gap-3">
-              {(['bicicleta', 'moto', 'carro'] as VehicleType[]).map(tipo => {
-                const Icon = vehicleIcons[tipo];
-                const active = veiculoTipo === tipo;
-                return (
-                  <button
-                    key={tipo}
-                    onClick={() => setVeiculoTipo(tipo)}
-                    className={cn(
-                      'flex flex-col items-center gap-2 rounded-xl border-2 p-6 transition-all',
-                      active ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
-                    )}
-                  >
-                    <Icon className={cn('h-8 w-8', active ? 'text-primary' : 'text-muted-foreground')} />
-                    <span className={cn('text-sm font-medium', active ? 'text-primary' : 'text-muted-foreground')}>
-                      {getVehicleLabel(tipo)}
-                    </span>
-                  </button>
-                );
-              })}
+          <div className="space-y-5 animate-fade-in">
+            <div>
+              <Label>Selecione o tipo de veículo</Label>
+              <div className="grid grid-cols-3 gap-3 mt-2">
+                {(['bicicleta', 'moto', 'carro'] as VehicleType[]).map(tipo => {
+                  const Icon = vehicleIcons[tipo];
+                  const active = veiculoTipo === tipo;
+                  return (
+                    <button
+                      key={tipo}
+                      onClick={() => setVeiculoTipo(tipo)}
+                      className={cn(
+                        'flex flex-col items-center gap-2 rounded-xl border-2 p-5 transition-all',
+                        active ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+                      )}
+                    >
+                      <Icon className={cn('h-7 w-7', active ? 'text-primary' : 'text-muted-foreground')} />
+                      <span className={cn('text-sm font-medium', active ? 'text-primary' : 'text-muted-foreground')}>
+                        {getVehicleLabel(tipo)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-semibold text-sm flex items-center gap-2">
+                <Camera className="h-4 w-4 text-primary" /> Registro Fotográfico
+              </h3>
+
+              <PhotoCapture
+                label="📸 Foto do Veículo"
+                folder="veiculos"
+                currentUrl={fotoVeiculo}
+                onCapture={setFotoVeiculo}
+                onRemove={() => setFotoVeiculo(null)}
+              />
+
+              {(veiculoTipo === 'moto' || veiculoTipo === 'carro') && (
+                <>
+                  <PhotoCapture
+                    label="🪪 Foto da CNH"
+                    folder="cnh"
+                    currentUrl={fotoCnh}
+                    onCapture={setFotoCnh}
+                    onRemove={() => setFotoCnh(null)}
+                  />
+
+                  <PhotoCapture
+                    label="🔢 Foto da Placa"
+                    folder="placas"
+                    currentUrl={fotoPlaca}
+                    onCapture={setFotoPlaca}
+                    onRemove={() => setFotoPlaca(null)}
+                  />
+                </>
+              )}
             </div>
           </div>
         )}
@@ -406,10 +450,14 @@ export default function NovaBlitz() {
                 </div>
                 <div className="space-y-2">
                   <Label>Fotos da anomalia</Label>
-                  <button className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed p-8 text-muted-foreground hover:border-primary/30 transition-colors">
-                    <Camera className="h-6 w-6" />
-                    <span className="text-sm">Tirar foto ou selecionar</span>
-                  </button>
+                  <MultiPhotoCapture
+                    label="Foto da anomalia"
+                    folder="anomalias"
+                    urls={fotosAnomalia}
+                    onAdd={(url) => setFotosAnomalia(prev => [...prev, url])}
+                    onRemove={(i) => setFotosAnomalia(prev => prev.filter((_, idx) => idx !== i))}
+                    maxPhotos={5}
+                  />
                 </div>
               </div>
             )}
@@ -428,8 +476,42 @@ export default function NovaBlitz() {
                 <div className="flex justify-between"><span className="text-muted-foreground">Itens checados</span><span>{Object.keys(respostas).length}/{checklist.length}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Não conformidades</span><span>{Object.values(respostas).filter(r => r === 'nao').length}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Anomalia</span><span>{temAnomalia ? 'Sim' : 'Não'}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Fotos</span><span>{[fotoVeiculo, fotoCnh, fotoPlaca].filter(Boolean).length + fotosAnomalia.length}</span></div>
               </div>
             </div>
+
+            {/* Photo thumbnails */}
+            {(fotoVeiculo || fotoCnh || fotoPlaca || fotosAnomalia.length > 0) && (
+              <div className="rounded-xl border bg-card p-4">
+                <h4 className="text-xs font-medium text-muted-foreground mb-2">Fotos registradas</h4>
+                <div className="grid grid-cols-4 gap-2">
+                  {fotoVeiculo && (
+                    <div className="relative rounded-lg overflow-hidden aspect-square">
+                      <img src={fotoVeiculo} alt="Veículo" className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] text-center py-0.5">Veículo</span>
+                    </div>
+                  )}
+                  {fotoCnh && (
+                    <div className="relative rounded-lg overflow-hidden aspect-square">
+                      <img src={fotoCnh} alt="CNH" className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] text-center py-0.5">CNH</span>
+                    </div>
+                  )}
+                  {fotoPlaca && (
+                    <div className="relative rounded-lg overflow-hidden aspect-square">
+                      <img src={fotoPlaca} alt="Placa" className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] text-center py-0.5">Placa</span>
+                    </div>
+                  )}
+                  {fotosAnomalia.map((url, i) => (
+                    <div key={i} className="relative rounded-lg overflow-hidden aspect-square">
+                      <img src={url} alt={`Anomalia ${i+1}`} className="w-full h-full object-cover" />
+                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[9px] text-center py-0.5">Anomalia</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {Object.values(respostas).some(r => r === 'nao') || temAnomalia ? (
               <div className="rounded-xl bg-status-danger/10 border border-status-danger/30 p-4 text-center">

@@ -21,6 +21,10 @@ export type Database = {
           colaborador_nome: string
           created_at: string
           data: string
+          foto_cnh_url: string | null
+          foto_placa_url: string | null
+          foto_veiculo_url: string | null
+          fotos_anomalia_urls: string[] | null
           id: string
           lideranca_id: string | null
           lideranca_nome: string
@@ -34,6 +38,10 @@ export type Database = {
           colaborador_nome?: string
           created_at?: string
           data?: string
+          foto_cnh_url?: string | null
+          foto_placa_url?: string | null
+          foto_veiculo_url?: string | null
+          fotos_anomalia_urls?: string[] | null
           id?: string
           lideranca_id?: string | null
           lideranca_nome?: string
@@ -47,6 +55,10 @@ export type Database = {
           colaborador_nome?: string
           created_at?: string
           data?: string
+          foto_cnh_url?: string | null
+          foto_placa_url?: string | null
+          foto_veiculo_url?: string | null
+          fotos_anomalia_urls?: string[] | null
           id?: string
           lideranca_id?: string | null
           lideranca_nome?: string
