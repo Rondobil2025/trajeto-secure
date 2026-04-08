@@ -394,9 +394,61 @@ export default function NovaBlitz() {
                     label="🪪 Foto da CNH"
                     folder="cnh"
                     currentUrl={fotoCnh}
-                    onCapture={setFotoCnh}
-                    onRemove={() => setFotoCnh(null)}
+                    onCapture={(url) => {
+                      setFotoCnh(url);
+                      setOcrData(null);
+                      runOcrCnh(url);
+                    }}
+                    onRemove={() => { setFotoCnh(null); setOcrData(null); }}
                   />
+
+                  {/* OCR Result */}
+                  {ocrLoading && (
+                    <div className="flex items-center gap-3 rounded-xl border border-primary/30 bg-primary/5 p-4 animate-fade-in">
+                      <ScanLine className="h-5 w-5 text-primary animate-pulse" />
+                      <span className="text-sm text-primary font-medium">Lendo CNH com IA...</span>
+                    </div>
+                  )}
+
+                  {ocrData && !ocrLoading && colaborador && (
+                    <div className="rounded-xl border bg-card p-4 space-y-3 animate-slide-up">
+                      <h4 className="text-sm font-semibold flex items-center gap-2">
+                        <ScanLine className="h-4 w-4 text-primary" />
+                        Dados extraídos da CNH (IA)
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        {/* Nome */}
+                        <OcrCompareRow
+                          label="Nome"
+                          ocrValue={ocrData.nome}
+                          dbValue={colaborador.nome}
+                          compare={(a, b) => a.toUpperCase().trim() === b.toUpperCase().trim()}
+                        />
+                        {/* Número */}
+                        <OcrCompareRow
+                          label="Nº Registro"
+                          ocrValue={ocrData.numero}
+                          dbValue={colaborador.cnh_numero}
+                          compare={(a, b) => a.replace(/\D/g, '') === b.replace(/\D/g, '')}
+                        />
+                        {/* Validade */}
+                        <OcrCompareRow
+                          label="Validade"
+                          ocrValue={ocrData.validade}
+                          dbValue={colaborador.cnh_validade}
+                          compare={(a, b) => a === b}
+                          formatValue={(v) => v ? new Date(v + 'T00:00:00').toLocaleDateString('pt-BR') : '—'}
+                        />
+                        {/* Categoria */}
+                        <OcrCompareRow
+                          label="Categoria"
+                          ocrValue={ocrData.categoria}
+                          dbValue={colaborador.cnh_categoria}
+                          compare={(a, b) => a.toUpperCase().trim() === b.toUpperCase().trim()}
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   <PhotoCapture
                     label="🔢 Foto da Placa"
