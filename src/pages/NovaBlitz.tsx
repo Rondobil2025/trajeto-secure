@@ -29,7 +29,10 @@ export default function NovaBlitz() {
   const [respostas, setRespostas] = useState<Record<string, CheckAnswer>>({});
   const [temAnomalia, setTemAnomalia] = useState(false);
   const [descAnomalia, setDescAnomalia] = useState('');
-
+  const [fotoVeiculo, setFotoVeiculo] = useState<string | null>(null);
+  const [fotoCnh, setFotoCnh] = useState<string | null>(null);
+  const [fotoPlaca, setFotoPlaca] = useState<string | null>(null);
+  const [fotosAnomalia, setFotosAnomalia] = useState<string[]>([]);
   const validarLider = () => {
     const cpf = cleanCPF(cpfLider);
     // TODO: validate against liderancas table
