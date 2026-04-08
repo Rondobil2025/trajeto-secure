@@ -441,9 +441,9 @@ export default function NovaBlitz() {
               </div>
             )}
 
-            <Button onClick={finalizar} className="w-full h-12 text-base">
-              <CheckCircle2 className="h-5 w-5 mr-2" />
-              Finalizar e Registrar Blitz
+            <Button onClick={finalizar} className="w-full h-12 text-base" disabled={salvando}>
+              {salvando ? <Loader2 className="h-5 w-5 mr-2 animate-spin" /> : <CheckCircle2 className="h-5 w-5 mr-2" />}
+              {salvando ? 'Salvando...' : 'Finalizar e Registrar Blitz'}
             </Button>
           </div>
         )}
