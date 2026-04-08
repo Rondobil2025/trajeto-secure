@@ -1,10 +1,18 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+import PortalHome from "./pages/PortalHome";
+import NovaBlitz from "./pages/NovaBlitz";
+import ConsultarBlitz from "./pages/ConsultarBlitz";
+import Pendencias from "./pages/Pendencias";
+import PlanosAcao from "./pages/PlanosAcao";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminColaboradores from "./pages/AdminColaboradores";
+import AdminLiderancas from "./pages/AdminLiderancas";
+import AdminAuditoria from "./pages/AdminAuditoria";
 
 const queryClient = new QueryClient();
 
@@ -12,11 +20,26 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          {/* Portal Liderança (mobile) */}
+          <Route path="/portal" element={<PortalHome />} />
+          <Route path="/portal/nova-blitz" element={<NovaBlitz />} />
+          <Route path="/portal/consultar" element={<ConsultarBlitz />} />
+          <Route path="/portal/pendencias" element={<Pendencias />} />
+          <Route path="/portal/planos" element={<PlanosAcao />} />
+          {/* Admin */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/colaboradores" element={<AdminColaboradores />} />
+          <Route path="/admin/liderancas" element={<AdminLiderancas />} />
+          <Route path="/admin/blitz" element={<ConsultarBlitz />} />
+          <Route path="/admin/planos" element={<PlanosAcao />} />
+          <Route path="/admin/auditoria" element={<AdminAuditoria />} />
+          <Route path="/admin/termos" element={<NotFound />} />
+          <Route path="/admin/importar" element={<NotFound />} />
+          <Route path="/admin/relatorios" element={<NotFound />} />
+          <Route path="/admin/configuracoes" element={<NotFound />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
