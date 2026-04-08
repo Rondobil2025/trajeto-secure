@@ -56,18 +56,16 @@ export default function PortalHome() {
         <div className="yellow-stripe h-1.5" />
       </div>
 
-      {/* Quick stats */}
-      <div className="px-4 md:px-8 -mt-10 max-w-4xl mx-auto w-full">
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            { label: 'Hoje', value: '12', sub: 'inspeções' },
-            { label: 'Pendentes', value: '3', sub: 'atrasadas' },
-            { label: 'Conformidade', value: '94%', sub: 'do mês' },
-          ].map((stat) => (
-            <div key={stat.label} className="rounded-xl bg-card border shadow-sm p-4 text-center">
-              <p className="text-xl md:text-2xl font-bold font-display text-foreground">{stat.value}</p>
-              <p className="text-[10px] md:text-xs text-muted-foreground font-medium uppercase tracking-wide">{stat.sub}</p>
-            </div>
+      {/* Tabs */}
+      <div className="px-4 md:px-8 -mt-8 max-w-4xl mx-auto w-full">
+        <div className="flex gap-2">
+          {['INSPEÇÕES', 'ATRASADAS', 'DO MÊS'].map((tab) => (
+            <button
+              key={tab}
+              className="flex-1 rounded-lg border bg-card shadow-sm px-3 py-2.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {tab}
+            </button>
           ))}
         </div>
       </div>
