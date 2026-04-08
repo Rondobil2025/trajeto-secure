@@ -61,6 +61,7 @@ export default function NovaBlitz() {
     }
   };
 
+  const validarLider = () => {
     const cpf = cleanCPF(cpfLider);
     // TODO: validate against liderancas table
     if (cpf.length === 11 && senha === '1234') {
