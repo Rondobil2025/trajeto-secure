@@ -450,10 +450,14 @@ export default function NovaBlitz() {
                 </div>
                 <div className="space-y-2">
                   <Label>Fotos da anomalia</Label>
-                  <button className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed p-8 text-muted-foreground hover:border-primary/30 transition-colors">
-                    <Camera className="h-6 w-6" />
-                    <span className="text-sm">Tirar foto ou selecionar</span>
-                  </button>
+                  <MultiPhotoCapture
+                    label="Foto da anomalia"
+                    folder="anomalias"
+                    urls={fotosAnomalia}
+                    onAdd={(url) => setFotosAnomalia(prev => [...prev, url])}
+                    onRemove={(i) => setFotosAnomalia(prev => prev.filter((_, idx) => idx !== i))}
+                    maxPhotos={5}
+                  />
                 </div>
               </div>
             )}
