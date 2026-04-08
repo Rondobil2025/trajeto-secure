@@ -156,6 +156,8 @@ export function getVehicleLabel(tipo: VehicleType): string {
     case 'bicicleta': return 'Bicicleta';
     case 'moto': return 'Moto';
     case 'carro': return 'Carro';
+    case 'onibus': return 'Ônibus';
+    case 'carona': return 'Carona';
   }
 }
 
