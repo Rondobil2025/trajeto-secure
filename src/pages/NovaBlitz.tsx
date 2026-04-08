@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, Camera, Bike, Car, AlertTriangle, Loader2, ImageIcon, ScanLine, CheckCheck, XCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Camera, Bike, Car, Bus, Users, AlertTriangle, Loader2, ImageIcon, ScanLine, CheckCheck, XCircle } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -289,10 +289,12 @@ export default function NovaBlitz() {
     </svg>
   );
 
-  const vehicleIcons = {
+  const vehicleIcons: Record<string, any> = {
     bicicleta: Bike,
     moto: MotoIcon,
     carro: Car,
+    onibus: Bus,
+    carona: Users,
   };
 
   return (
@@ -404,7 +406,7 @@ export default function NovaBlitz() {
             <div>
               <Label>Selecione o tipo de veículo</Label>
               <div className="grid grid-cols-3 gap-3 mt-2">
-                {(['bicicleta', 'moto', 'carro'] as VehicleType[]).map(tipo => {
+                {(['bicicleta', 'moto', 'carro', 'onibus', 'carona'] as VehicleType[]).map(tipo => {
                   const Icon = vehicleIcons[tipo];
                   const active = veiculoTipo === tipo;
                   return (

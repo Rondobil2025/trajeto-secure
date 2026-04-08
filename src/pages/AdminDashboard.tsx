@@ -55,19 +55,23 @@ export default function AdminDashboard() {
   }, [colaboradores, blitzList, planos]);
 
   const veiculoData = useMemo(() => {
-    const counts = { 'Moto': 0, 'Carro/Truck': 0, 'Bicicleta': 0 };
-    blitzList.forEach(b => {
-      const v = b.veiculo_tipo?.toLowerCase() || '';
-      if (v.includes('moto')) counts['Moto']++;
-      else if (v.includes('carro') || v.includes('truck') || v.includes('van')) counts['Carro/Truck']++;
-      else if (v.includes('bicicleta') || v.includes('bike')) counts['Bicicleta']++;
+    const counts = { 'Moto': 0, 'Carro': 0, 'Bicicleta': 0, 'Ônibus': 0, 'Carona': 0 };
+    colaboradores.forEach(c => {
+      const v = (c.veiculo_utilizado || '').toUpperCase();
+      if (v.includes('MOTO')) counts['Moto']++;
+      else if (v.includes('CARRO') || v.includes('TRUCK') || v.includes('VAN')) counts['Carro']++;
+      else if (v.includes('BICICLETA') || v.includes('BIKE')) counts['Bicicleta']++;
+      else if (v.includes('ONIBUS') || v.includes('ÔNIBUS')) counts['Ônibus']++;
+      else if (v.includes('CARONA')) counts['Carona']++;
     });
     return [
-      { name: 'Moto', value: counts['Moto'], fill: 'hsl(152, 72%, 30%)' },
-      { name: 'Carro/Truck', value: counts['Carro/Truck'], fill: 'hsl(217, 91%, 60%)' },
-      { name: 'Bicicleta', value: counts['Bicicleta'], fill: 'hsl(38, 92%, 50%)' },
+      { name: 'Moto', value: counts['Moto'], fill: 'hsl(25, 95%, 53%)' },
+      { name: 'Carro', value: counts['Carro'], fill: 'hsl(142, 71%, 45%)' },
+      { name: 'Bicicleta', value: counts['Bicicleta'], fill: 'hsl(217, 91%, 60%)' },
+      { name: 'Ônibus', value: counts['Ônibus'], fill: 'hsl(271, 91%, 65%)' },
+      { name: 'Carona', value: counts['Carona'], fill: 'hsl(174, 72%, 40%)' },
     ];
-  }, [blitzList]);
+  }, [colaboradores]);
 
   if (isLoading) {
     return (

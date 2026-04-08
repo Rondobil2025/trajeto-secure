@@ -1,5 +1,5 @@
 export type UserRole = 'admin' | 'leadership' | 'viewer';
-export type VehicleType = 'bicicleta' | 'moto' | 'carro';
+export type VehicleType = 'bicicleta' | 'moto' | 'carro' | 'onibus' | 'carona';
 export type BlitzStatus = 'conforme' | 'conforme_observacoes' | 'nao_conforme';
 export type PlanStatus = 'aberto' | 'em_andamento' | 'vencido' | 'concluido';
 export type Priority = 'baixa' | 'media' | 'alta' | 'critica';
@@ -134,6 +134,8 @@ export function getChecklist(tipo: VehicleType): ChecklistQuestion[] {
     case 'bicicleta': return CHECKLIST_BICICLETA;
     case 'moto': return CHECKLIST_MOTO;
     case 'carro': return CHECKLIST_CARRO;
+    case 'onibus': return CHECKLIST_BICICLETA; // minimal checklist for bus users
+    case 'carona': return CHECKLIST_BICICLETA; // minimal checklist for carpool
   }
 }
 
@@ -154,6 +156,8 @@ export function getVehicleLabel(tipo: VehicleType): string {
     case 'bicicleta': return 'Bicicleta';
     case 'moto': return 'Moto';
     case 'carro': return 'Carro';
+    case 'onibus': return 'Ônibus';
+    case 'carona': return 'Carona';
   }
 }
 
