@@ -125,6 +125,9 @@ function useBlitzWithItems(vehicleType: string) {
 export default function AdminChecklist() {
   const [activeTab, setActiveTab] = useState('moto');
   const [busca, setBusca] = useState('');
+  const [filterMes, setFilterMes] = useState<string>('todos');
+  const [filterSetor, setFilterSetor] = useState<string>('todos');
+  const [filterPilar, setFilterPilar] = useState<string>('todos');
   const [editBlitz, setEditBlitz] = useState<BlitzWithItems | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
   const queryClient = useQueryClient();
