@@ -17,6 +17,7 @@ import { useLiderancas } from '@/hooks/useLiderancas';
 interface BlitzWithItems {
   id: string;
   data: string;
+  pilar: string;
   lideranca_nome: string;
   colaborador_nome: string;
   colaborador_cpf: string;
