@@ -29,6 +29,7 @@ export type Database = {
           lideranca_id: string | null
           lideranca_nome: string
           observacoes: string | null
+          pilar: string
           status: string
           veiculo_tipo: string
         }
@@ -46,6 +47,7 @@ export type Database = {
           lideranca_id?: string | null
           lideranca_nome?: string
           observacoes?: string | null
+          pilar?: string
           status?: string
           veiculo_tipo?: string
         }
@@ -63,6 +65,7 @@ export type Database = {
           lideranca_id?: string | null
           lideranca_nome?: string
           observacoes?: string | null
+          pilar?: string
           status?: string
           veiculo_tipo?: string
         }

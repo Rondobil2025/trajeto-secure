@@ -1,0 +1,1 @@
+ALTER TABLE public.blitz ADD COLUMN pilar text NOT NULL DEFAULT 'DPO';
