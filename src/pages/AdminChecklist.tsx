@@ -254,7 +254,7 @@ function ChecklistTable({ data, vehicleType, onEdit }: { data: BlitzWithItems[];
           </thead>
           <tbody>
             {data.map(b => {
-              const pilar = b.observacoes?.includes('DPO') ? 'DPO' : b.observacoes?.includes('SPO') ? 'SPO' : '—';
+              const pilar = (b as any).pilar || '—';
               return (
                 <tr key={b.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
                   <td className="px-3 py-2 sticky left-0 bg-card z-10">
@@ -310,6 +310,7 @@ function ChecklistTable({ data, vehicleType, onEdit }: { data: BlitzWithItems[];
 
 function EditBlitzDialog({ blitz, onClose, onSaved }: { blitz: BlitzWithItems; onClose: () => void; onSaved: () => void }) {
   const [data, setData] = useState(blitz.data);
+  const [pilar, setPilar] = useState((blitz as any).pilar || 'DPO');
   const [lideranca, setLideranca] = useState(blitz.lideranca_nome);
   const [colaborador, setColaborador] = useState(blitz.colaborador_nome);
   const [cpf, setCpf] = useState(blitz.colaborador_cpf);
@@ -327,6 +328,7 @@ function EditBlitzDialog({ blitz, onClose, onSaved }: { blitz: BlitzWithItems; o
         .from('blitz' as any)
         .update({
           data,
+          pilar,
           lideranca_nome: lideranca,
           colaborador_nome: colaborador,
           colaborador_cpf: cpf,
