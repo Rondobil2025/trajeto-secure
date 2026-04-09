@@ -125,6 +125,9 @@ function useBlitzWithItems(vehicleType: string) {
 export default function AdminChecklist() {
   const [activeTab, setActiveTab] = useState('moto');
   const [busca, setBusca] = useState('');
+  const [filterMes, setFilterMes] = useState<string>('todos');
+  const [filterSetor, setFilterSetor] = useState<string>('todos');
+  const [filterPilar, setFilterPilar] = useState<string>('todos');
   const [editBlitz, setEditBlitz] = useState<BlitzWithItems | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
   const queryClient = useQueryClient();
@@ -141,15 +144,46 @@ export default function AdminChecklist() {
 
   const { data: currentData, loading } = dataMap[activeTab] || dataMap.moto;
 
+  // Extract unique sectors from all data
+  const allSetores = useMemo(() => {
+    const all = [...motoData, ...carroData, ...bicicletaData];
+    const setores = new Set<string>();
+    all.forEach(b => {
+      // Try to get setor from observacoes or a known field
+      if (b.setor) setores.add(b.setor);
+    });
+    // Also check colaborador info patterns
+    return Array.from(setores).sort();
+  }, [motoData, carroData, bicicletaData]);
+
   const filtered = useMemo(() => {
-    if (!busca) return currentData;
-    const q = busca.toLowerCase();
-    return currentData.filter(b =>
-      b.colaborador_nome.toLowerCase().includes(q) ||
-      b.colaborador_cpf.includes(busca.replace(/\D/g, '')) ||
-      b.lideranca_nome.toLowerCase().includes(q)
-    );
-  }, [currentData, busca]);
+    let result = currentData;
+
+    // Filter by search
+    if (busca) {
+      const q = busca.toLowerCase();
+      result = result.filter(b =>
+        b.colaborador_nome.toLowerCase().includes(q) ||
+        b.colaborador_cpf.includes(busca.replace(/\D/g, '')) ||
+        b.lideranca_nome.toLowerCase().includes(q)
+      );
+    }
+
+    // Filter by month
+    if (filterMes !== 'todos') {
+      result = result.filter(b => {
+        const month = new Date(b.data).getMonth() + 1;
+        return month.toString() === filterMes;
+      });
+    }
+
+    // Filter by pilar
+    if (filterPilar !== 'todos') {
+      result = result.filter(b => b.pilar === filterPilar);
+    }
+
+    return result;
+  }, [currentData, busca, filterMes, filterPilar]);
 
   return (
     <div className="flex min-h-screen">
@@ -173,15 +207,48 @@ export default function AdminChecklist() {
                 <TabsTrigger value="carro" className="gap-1.5">🚗 Carro ({carroData.length})</TabsTrigger>
                 <TabsTrigger value="bicicleta" className="gap-1.5">🚲 Bicicleta ({bicicletaData.length})</TabsTrigger>
               </TabsList>
-              <div className="flex gap-2">
-                <div className="relative min-w-[200px]">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Buscar..." className="pl-10" value={busca} onChange={e => setBusca(e.target.value)} />
-                </div>
-                <Button onClick={() => setShowNewForm(true)} className="gap-1.5">
-                  <Plus className="h-4 w-4" /> Nova Inspeção
-                </Button>
+              <Button onClick={() => setShowNewForm(true)} className="gap-1.5">
+                <Plus className="h-4 w-4" /> Nova Inspeção
+              </Button>
+            </div>
+
+            {/* Filters row */}
+            <div className="flex flex-wrap gap-3 items-center">
+              <div className="relative min-w-[200px]">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Buscar nome, CPF..." className="pl-10" value={busca} onChange={e => setBusca(e.target.value)} />
               </div>
+              <Select value={filterMes} onValueChange={setFilterMes}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Mês" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">Todos os meses</SelectItem>
+                  <SelectItem value="1">Janeiro</SelectItem>
+                  <SelectItem value="2">Fevereiro</SelectItem>
+                  <SelectItem value="3">Março</SelectItem>
+                  <SelectItem value="4">Abril</SelectItem>
+                  <SelectItem value="5">Maio</SelectItem>
+                  <SelectItem value="6">Junho</SelectItem>
+                  <SelectItem value="7">Julho</SelectItem>
+                  <SelectItem value="8">Agosto</SelectItem>
+                  <SelectItem value="9">Setembro</SelectItem>
+                  <SelectItem value="10">Outubro</SelectItem>
+                  <SelectItem value="11">Novembro</SelectItem>
+                  <SelectItem value="12">Dezembro</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={filterPilar} onValueChange={setFilterPilar}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="Pilar" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">Todos pilares</SelectItem>
+                  <SelectItem value="DPO">DPO</SelectItem>
+                  <SelectItem value="SPO">SPO</SelectItem>
+                </SelectContent>
+              </Select>
+              <span className="text-sm text-muted-foreground ml-auto">{filtered.length} resultado(s)</span>
             </div>
 
             {['moto', 'carro', 'bicicleta'].map(tipo => (
