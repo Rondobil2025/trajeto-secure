@@ -207,15 +207,48 @@ export default function AdminChecklist() {
                 <TabsTrigger value="carro" className="gap-1.5">🚗 Carro ({carroData.length})</TabsTrigger>
                 <TabsTrigger value="bicicleta" className="gap-1.5">🚲 Bicicleta ({bicicletaData.length})</TabsTrigger>
               </TabsList>
-              <div className="flex gap-2">
-                <div className="relative min-w-[200px]">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Buscar..." className="pl-10" value={busca} onChange={e => setBusca(e.target.value)} />
-                </div>
-                <Button onClick={() => setShowNewForm(true)} className="gap-1.5">
-                  <Plus className="h-4 w-4" /> Nova Inspeção
-                </Button>
+              <Button onClick={() => setShowNewForm(true)} className="gap-1.5">
+                <Plus className="h-4 w-4" /> Nova Inspeção
+              </Button>
+            </div>
+
+            {/* Filters row */}
+            <div className="flex flex-wrap gap-3 items-center">
+              <div className="relative min-w-[200px]">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Buscar nome, CPF..." className="pl-10" value={busca} onChange={e => setBusca(e.target.value)} />
               </div>
+              <Select value={filterMes} onValueChange={setFilterMes}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Mês" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">Todos os meses</SelectItem>
+                  <SelectItem value="1">Janeiro</SelectItem>
+                  <SelectItem value="2">Fevereiro</SelectItem>
+                  <SelectItem value="3">Março</SelectItem>
+                  <SelectItem value="4">Abril</SelectItem>
+                  <SelectItem value="5">Maio</SelectItem>
+                  <SelectItem value="6">Junho</SelectItem>
+                  <SelectItem value="7">Julho</SelectItem>
+                  <SelectItem value="8">Agosto</SelectItem>
+                  <SelectItem value="9">Setembro</SelectItem>
+                  <SelectItem value="10">Outubro</SelectItem>
+                  <SelectItem value="11">Novembro</SelectItem>
+                  <SelectItem value="12">Dezembro</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={filterPilar} onValueChange={setFilterPilar}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="Pilar" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">Todos pilares</SelectItem>
+                  <SelectItem value="DPO">DPO</SelectItem>
+                  <SelectItem value="SPO">SPO</SelectItem>
+                </SelectContent>
+              </Select>
+              <span className="text-sm text-muted-foreground ml-auto">{filtered.length} resultado(s)</span>
             </div>
 
             {['moto', 'carro', 'bicicleta'].map(tipo => (
