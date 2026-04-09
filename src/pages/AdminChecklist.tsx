@@ -491,8 +491,9 @@ function NewBlitzDialog({ vehicleType, onClose, onSaved }: { vehicleType: string
           colaborador_nome: selectedColab.nome,
           colaborador_cpf: selectedColab.cpf,
           veiculo_tipo: vehicleType,
+          pilar,
           status,
-          observacoes: `${pilar}|${setor}`,
+          observacoes: setor,
         } as any)
         .select()
         .single();
