@@ -357,10 +357,20 @@ function EditBlitzDialog({ blitz, onClose, onSaved }: { blitz: BlitzWithItems; o
         <DialogHeader>
           <DialogTitle>Editar Inspeção - {blitz.colaborador_nome}</DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           <div>
             <label className="text-xs font-medium">Data</label>
             <Input type="date" value={data} onChange={e => setData(e.target.value)} />
+          </div>
+          <div>
+            <label className="text-xs font-medium">Pilar</label>
+            <Select value={pilar} onValueChange={setPilar}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="DPO">DPO</SelectItem>
+                <SelectItem value="SPO">SPO</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="text-xs font-medium">Status</label>
