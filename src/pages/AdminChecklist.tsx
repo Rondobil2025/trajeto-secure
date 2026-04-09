@@ -17,6 +17,7 @@ import { useLiderancas } from '@/hooks/useLiderancas';
 interface BlitzWithItems {
   id: string;
   data: string;
+  pilar: string;
   lideranca_nome: string;
   colaborador_nome: string;
   colaborador_cpf: string;
@@ -253,7 +254,7 @@ function ChecklistTable({ data, vehicleType, onEdit }: { data: BlitzWithItems[];
           </thead>
           <tbody>
             {data.map(b => {
-              const pilar = b.observacoes?.includes('DPO') ? 'DPO' : b.observacoes?.includes('SPO') ? 'SPO' : '—';
+              const pilar = (b as any).pilar || '—';
               return (
                 <tr key={b.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
                   <td className="px-3 py-2 sticky left-0 bg-card z-10">
@@ -309,6 +310,7 @@ function ChecklistTable({ data, vehicleType, onEdit }: { data: BlitzWithItems[];
 
 function EditBlitzDialog({ blitz, onClose, onSaved }: { blitz: BlitzWithItems; onClose: () => void; onSaved: () => void }) {
   const [data, setData] = useState(blitz.data);
+  const [pilar, setPilar] = useState((blitz as any).pilar || 'DPO');
   const [lideranca, setLideranca] = useState(blitz.lideranca_nome);
   const [colaborador, setColaborador] = useState(blitz.colaborador_nome);
   const [cpf, setCpf] = useState(blitz.colaborador_cpf);
@@ -326,6 +328,7 @@ function EditBlitzDialog({ blitz, onClose, onSaved }: { blitz: BlitzWithItems; o
         .from('blitz' as any)
         .update({
           data,
+          pilar,
           lideranca_nome: lideranca,
           colaborador_nome: colaborador,
           colaborador_cpf: cpf,
@@ -354,10 +357,20 @@ function EditBlitzDialog({ blitz, onClose, onSaved }: { blitz: BlitzWithItems; o
         <DialogHeader>
           <DialogTitle>Editar Inspeção - {blitz.colaborador_nome}</DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           <div>
             <label className="text-xs font-medium">Data</label>
             <Input type="date" value={data} onChange={e => setData(e.target.value)} />
+          </div>
+          <div>
+            <label className="text-xs font-medium">Pilar</label>
+            <Select value={pilar} onValueChange={setPilar}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="DPO">DPO</SelectItem>
+                <SelectItem value="SPO">SPO</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <label className="text-xs font-medium">Status</label>
@@ -478,8 +491,9 @@ function NewBlitzDialog({ vehicleType, onClose, onSaved }: { vehicleType: string
           colaborador_nome: selectedColab.nome,
           colaborador_cpf: selectedColab.cpf,
           veiculo_tipo: vehicleType,
+          pilar,
           status,
-          observacoes: `${pilar}|${setor}`,
+          observacoes: setor,
         } as any)
         .select()
         .single();
