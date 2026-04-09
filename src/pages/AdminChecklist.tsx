@@ -144,15 +144,46 @@ export default function AdminChecklist() {
 
   const { data: currentData, loading } = dataMap[activeTab] || dataMap.moto;
 
+  // Extract unique sectors from all data
+  const allSetores = useMemo(() => {
+    const all = [...motoData, ...carroData, ...bicicletaData];
+    const setores = new Set<string>();
+    all.forEach(b => {
+      // Try to get setor from observacoes or a known field
+      if (b.setor) setores.add(b.setor);
+    });
+    // Also check colaborador info patterns
+    return Array.from(setores).sort();
+  }, [motoData, carroData, bicicletaData]);
+
   const filtered = useMemo(() => {
-    if (!busca) return currentData;
-    const q = busca.toLowerCase();
-    return currentData.filter(b =>
-      b.colaborador_nome.toLowerCase().includes(q) ||
-      b.colaborador_cpf.includes(busca.replace(/\D/g, '')) ||
-      b.lideranca_nome.toLowerCase().includes(q)
-    );
-  }, [currentData, busca]);
+    let result = currentData;
+
+    // Filter by search
+    if (busca) {
+      const q = busca.toLowerCase();
+      result = result.filter(b =>
+        b.colaborador_nome.toLowerCase().includes(q) ||
+        b.colaborador_cpf.includes(busca.replace(/\D/g, '')) ||
+        b.lideranca_nome.toLowerCase().includes(q)
+      );
+    }
+
+    // Filter by month
+    if (filterMes !== 'todos') {
+      result = result.filter(b => {
+        const month = new Date(b.data).getMonth() + 1;
+        return month.toString() === filterMes;
+      });
+    }
+
+    // Filter by pilar
+    if (filterPilar !== 'todos') {
+      result = result.filter(b => b.pilar === filterPilar);
+    }
+
+    return result;
+  }, [currentData, busca, filterMes, filterPilar]);
 
   return (
     <div className="flex min-h-screen">
