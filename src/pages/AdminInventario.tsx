@@ -2,13 +2,16 @@ import { AdminSidebar } from '@/components/AdminSidebar';
 import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF } from '@/lib/types';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Loader2, Bike, Car, Bus, Users, AlertTriangle, ShieldCheck, ShieldX, ShieldAlert, Calendar, Filter } from 'lucide-react';
+import { Search, Loader2, Bike, Car, Bus, Users, AlertTriangle, ShieldCheck, ShieldX, ShieldAlert, Calendar, Filter, Pencil, Plus } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useColaboradores } from '@/hooks/useColaboradores';
 import { useBlitzList } from '@/hooks/useBlitz';
 import { useColaboradorMensal } from '@/hooks/useColaboradorMensal';
+import { EditInventarioDialog } from '@/components/EditInventarioDialog';
+import { NewColaboradorDialog } from '@/components/NewColaboradorDialog';
 
 const MotoIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -53,6 +56,8 @@ export default function AdminInventario() {
   const [filtroSetor, setFiltroSetor] = useState('todos');
   const [filtroPilar, setFiltroPilar] = useState('todos');
   const [ano] = useState(new Date().getFullYear());
+  const [editing, setEditing] = useState<any | null>(null);
+  const [newOpen, setNewOpen] = useState(false);
   const { data: colaboradores = [], isLoading: loadingColab } = useColaboradores();
   const { data: blitzList = [], isLoading: loadingBlitz } = useBlitzList();
   const { data: mensalData = [], isLoading: loadingMensal } = useColaboradorMensal(ano);
@@ -185,6 +190,7 @@ export default function AdminInventario() {
                 {pilares.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
               </SelectContent>
             </Select>
+            <Button onClick={() => setNewOpen(true)} className="ml-auto"><Plus className="h-4 w-4 mr-1" />Novo Colaborador</Button>
           </div>
 
           {/* Tabs */}
@@ -210,7 +216,8 @@ export default function AdminInventario() {
                     <table className="w-full text-[11px] whitespace-nowrap">
                       <thead>
                         <tr className="bg-[hsl(230,50%,25%)] text-white">
-                          <th className="sticky left-0 bg-[hsl(230,50%,25%)] z-10 px-2 py-2 text-left font-semibold">NOME</th>
+                          <th className="sticky left-0 bg-[hsl(230,50%,25%)] z-10 px-2 py-2 text-center font-semibold">AÇÃO</th>
+                          <th className="px-2 py-2 text-left font-semibold">NOME</th>
                           <th className="px-2 py-2 text-left font-semibold">PILAR</th>
                           <th className="px-2 py-2 text-left font-semibold">VEÍCULO</th>
                           <th className="px-2 py-2 text-left font-semibold">SETOR</th>
@@ -239,7 +246,10 @@ export default function AdminInventario() {
                       <tbody>
                         {filtered.map((c, idx) => (
                           <tr key={c.id} className={`border-b last:border-0 hover:bg-muted/30 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-muted/10'}`}>
-                            <td className="sticky left-0 bg-inherit z-10 px-2 py-1.5 font-medium max-w-[200px] truncate">{c.nome}</td>
+                            <td className="sticky left-0 bg-inherit z-10 px-2 py-1.5 text-center">
+                              <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => setEditing(c)}><Pencil className="h-3.5 w-3.5" /></Button>
+                            </td>
+                            <td className="px-2 py-1.5 font-medium max-w-[200px] truncate">{c.nome}</td>
                             <td className="px-2 py-1.5">{c.pilar || '—'}</td>
                             <td className="px-2 py-1.5"><VeiculoBadge veiculo={c.veiculo} /></td>
                             <td className="px-2 py-1.5">{c.setor}</td>
@@ -302,6 +312,8 @@ export default function AdminInventario() {
           </Tabs>
         </div>
       </main>
+      <EditInventarioDialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)} colaborador={editing} ano={ano} mensalData={mensalData} />
+      <NewColaboradorDialog open={newOpen} onOpenChange={setNewOpen} />
     </div>
   );
 }
