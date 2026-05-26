@@ -270,13 +270,8 @@ export default function AdminInventario() {
                             <td className="px-2 py-1.5 text-center">
                               <StatusBadge variant={c.cnhInfo.variant}>{c.cnhInfo.label}</StatusBadge>
                             </td>
-                            <td className="px-2 py-1.5 text-center">
-                              {(c.veiculo.includes('MOTO') || c.veiculo.includes('CARRO')) ? (
-                                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${(c as any).curso_direcao_defensiva ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
-                                  {(c as any).curso_direcao_defensiva ? 'SIM' : 'NÃO'}
-                                </span>
-                              ) : '—'}
-                            </td>
+                            <td className="px-2 py-1.5 text-center"><CursoCell done={(c as any).curso_teorico} data={(c as any).curso_teorico_data} /></td>
+                            <td className="px-2 py-1.5 text-center"><CursoCell done={(c as any).curso_pratico} data={(c as any).curso_pratico_data} /></td>
                             <td className="px-2 py-1.5 text-center">{formatDate(c.primeiraBlitz)}</td>
                             <td className="px-2 py-1.5 text-center">{formatDate(c.ultimaBlitz)}</td>
                             <td className="px-2 py-1.5 max-w-[120px] truncate text-[10px]">{c.anomalias}</td>
