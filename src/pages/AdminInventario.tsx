@@ -190,6 +190,7 @@ export default function AdminInventario() {
                 {pilares.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
               </SelectContent>
             </Select>
+            <Button onClick={() => setNewOpen(true)} className="ml-auto"><Plus className="h-4 w-4 mr-1" />Novo Colaborador</Button>
           </div>
 
           {/* Tabs */}
