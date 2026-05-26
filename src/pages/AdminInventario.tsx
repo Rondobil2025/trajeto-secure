@@ -312,6 +312,8 @@ export default function AdminInventario() {
           </Tabs>
         </div>
       </main>
+      <EditInventarioDialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)} colaborador={editing} ano={ano} mensalData={mensalData} />
+      <NewColaboradorDialog open={newOpen} onOpenChange={setNewOpen} />
     </div>
   );
 }
