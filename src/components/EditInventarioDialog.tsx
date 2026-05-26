@@ -63,6 +63,10 @@ export function EditInventarioDialog({ open, onOpenChange, colaborador, ano, men
         cnh_categoria: form.cnh_categoria || '',
         cnh_status: form.cnh_status || 'sem_cnh',
         curso_direcao_defensiva: !!form.curso_direcao_defensiva,
+        curso_teorico: !!form.curso_teorico,
+        curso_teorico_data: form.curso_teorico_data || null,
+        curso_pratico: !!form.curso_pratico,
+        curso_pratico_data: form.curso_pratico_data || null,
         ativo: form.ativo !== false,
       };
       const { error } = await supabase.from('colaboradores' as any).update(payload).eq('id', colaborador.id);
