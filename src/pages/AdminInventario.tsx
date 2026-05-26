@@ -233,7 +233,8 @@ export default function AdminInventario() {
                           <th className="px-2 py-2 text-left font-semibold">VALIDADE</th>
                           <th className="px-2 py-2 text-center font-semibold">CAT</th>
                           <th className="px-2 py-2 text-center font-semibold">STATUS CNH</th>
-                          <th className="px-2 py-2 text-center font-semibold">DIR.DEF</th>
+                          <th className="px-2 py-2 text-center font-semibold">TEÓRICO</th>
+                          <th className="px-2 py-2 text-center font-semibold">PRÁTICO</th>
                           <th className="px-2 py-2 text-center font-semibold">1ª BLITZ {ano}</th>
                           <th className="px-2 py-2 text-center font-semibold">ÚLT. BLITZ</th>
                           <th className="px-2 py-2 text-left font-semibold">ANOMALIAS</th>
