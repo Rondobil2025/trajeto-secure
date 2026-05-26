@@ -165,6 +165,10 @@ export type Database = {
           created_at: string
           curso_direcao_defensiva: boolean | null
           curso_direcao_defensiva_data: string | null
+          curso_pratico: boolean | null
+          curso_pratico_data: string | null
+          curso_teorico: boolean | null
+          curso_teorico_data: string | null
           data_nascimento: string | null
           data_ultima_blitz: string | null
           email: string | null
@@ -191,6 +195,10 @@ export type Database = {
           created_at?: string
           curso_direcao_defensiva?: boolean | null
           curso_direcao_defensiva_data?: string | null
+          curso_pratico?: boolean | null
+          curso_pratico_data?: string | null
+          curso_teorico?: boolean | null
+          curso_teorico_data?: string | null
           data_nascimento?: string | null
           data_ultima_blitz?: string | null
           email?: string | null
@@ -217,6 +225,10 @@ export type Database = {
           created_at?: string
           curso_direcao_defensiva?: boolean | null
           curso_direcao_defensiva_data?: string | null
+          curso_pratico?: boolean | null
+          curso_pratico_data?: string | null
+          curso_teorico?: boolean | null
+          curso_teorico_data?: string | null
           data_nascimento?: string | null
           data_ultima_blitz?: string | null
           email?: string | null

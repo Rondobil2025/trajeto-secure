@@ -233,7 +233,8 @@ export default function AdminInventario() {
                           <th className="px-2 py-2 text-left font-semibold">VALIDADE</th>
                           <th className="px-2 py-2 text-center font-semibold">CAT</th>
                           <th className="px-2 py-2 text-center font-semibold">STATUS CNH</th>
-                          <th className="px-2 py-2 text-center font-semibold">DIR.DEF</th>
+                          <th className="px-2 py-2 text-center font-semibold">TEÓRICO</th>
+                          <th className="px-2 py-2 text-center font-semibold">PRÁTICO</th>
                           <th className="px-2 py-2 text-center font-semibold">1ª BLITZ {ano}</th>
                           <th className="px-2 py-2 text-center font-semibold">ÚLT. BLITZ</th>
                           <th className="px-2 py-2 text-left font-semibold">ANOMALIAS</th>
@@ -269,13 +270,8 @@ export default function AdminInventario() {
                             <td className="px-2 py-1.5 text-center">
                               <StatusBadge variant={c.cnhInfo.variant}>{c.cnhInfo.label}</StatusBadge>
                             </td>
-                            <td className="px-2 py-1.5 text-center">
-                              {(c.veiculo.includes('MOTO') || c.veiculo.includes('CARRO')) ? (
-                                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${(c as any).curso_direcao_defensiva ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
-                                  {(c as any).curso_direcao_defensiva ? 'SIM' : 'NÃO'}
-                                </span>
-                              ) : '—'}
-                            </td>
+                            <td className="px-2 py-1.5 text-center"><CursoCell done={(c as any).curso_teorico} data={(c as any).curso_teorico_data} /></td>
+                            <td className="px-2 py-1.5 text-center"><CursoCell done={(c as any).curso_pratico} data={(c as any).curso_pratico_data} /></td>
                             <td className="px-2 py-1.5 text-center">{formatDate(c.primeiraBlitz)}</td>
                             <td className="px-2 py-1.5 text-center">{formatDate(c.ultimaBlitz)}</td>
                             <td className="px-2 py-1.5 max-w-[120px] truncate text-[10px]">{c.anomalias}</td>
@@ -346,4 +342,23 @@ function VeiculoBadge({ veiculo }: { veiculo: string }) {
   if (v.includes('ONIBUS') || v.includes('ÔNIBUS')) return <span className="inline-block bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded text-[10px] font-bold">ÔNIBUS</span>;
   if (v.includes('CARONA')) return <span className="inline-block bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded text-[10px] font-bold">CARONA</span>;
   return <span className="text-[10px] text-muted-foreground">{veiculo || '—'}</span>;
+}
+
+function CursoCell({ done, data }: { done?: boolean; data?: string | null }) {
+  if (!done && !data) {
+    return <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700">NÃO</span>;
+  }
+  if (data) {
+    const realizada = new Date(data);
+    const valido = (Date.now() - realizada.getTime()) / (1000 * 60 * 60 * 24) <= 365;
+    const cls = valido ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700';
+    const label = valido ? 'OK' : 'VENC.';
+    return (
+      <div className="flex flex-col items-center gap-0.5">
+        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${cls}`}>{label}</span>
+        <span className="text-[9px] text-muted-foreground">{realizada.toLocaleDateString('pt-BR')}</span>
+      </div>
+    );
+  }
+  return <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">SIM</span>;
 }

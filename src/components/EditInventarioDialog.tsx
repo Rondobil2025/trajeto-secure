@@ -63,6 +63,10 @@ export function EditInventarioDialog({ open, onOpenChange, colaborador, ano, men
         cnh_categoria: form.cnh_categoria || '',
         cnh_status: form.cnh_status || 'sem_cnh',
         curso_direcao_defensiva: !!form.curso_direcao_defensiva,
+        curso_teorico: !!form.curso_teorico,
+        curso_teorico_data: form.curso_teorico_data || null,
+        curso_pratico: !!form.curso_pratico,
+        curso_pratico_data: form.curso_pratico_data || null,
         ativo: form.ativo !== false,
       };
       const { error } = await supabase.from('colaboradores' as any).update(payload).eq('id', colaborador.id);
@@ -147,11 +151,23 @@ export function EditInventarioDialog({ open, onOpenChange, colaborador, ano, men
           <Field label="CNH Número"><Input value={form.cnh_numero || ''} onChange={(e) => upd('cnh_numero', e.target.value)} /></Field>
           <Field label="CNH Validade"><Input type="date" value={form.cnh_validade || ''} onChange={(e) => upd('cnh_validade', e.target.value)} /></Field>
           <Field label="CNH Categoria"><Input value={form.cnh_categoria || ''} onChange={(e) => upd('cnh_categoria', e.target.value)} /></Field>
-          <Field label="Curso Direção Defensiva">
+          <Field label="Curso Teórico Direção Defensiva">
             <div className="flex items-center h-10 gap-2">
-              <Checkbox checked={!!form.curso_direcao_defensiva} onCheckedChange={(v) => upd('curso_direcao_defensiva', !!v)} />
+              <Checkbox checked={!!form.curso_teorico} onCheckedChange={(v) => upd('curso_teorico', !!v)} />
               <span className="text-sm">Concluído</span>
             </div>
+          </Field>
+          <Field label="Data Curso Teórico">
+            <Input type="date" value={form.curso_teorico_data || ''} onChange={(e) => upd('curso_teorico_data', e.target.value)} />
+          </Field>
+          <Field label="Curso Prático Direção Defensiva">
+            <div className="flex items-center h-10 gap-2">
+              <Checkbox checked={!!form.curso_pratico} onCheckedChange={(v) => upd('curso_pratico', !!v)} />
+              <span className="text-sm">Concluído</span>
+            </div>
+          </Field>
+          <Field label="Data Curso Prático">
+            <Input type="date" value={form.curso_pratico_data || ''} onChange={(e) => upd('curso_pratico_data', e.target.value)} />
           </Field>
         </div>
 
