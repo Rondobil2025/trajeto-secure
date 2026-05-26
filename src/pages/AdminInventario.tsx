@@ -246,7 +246,10 @@ export default function AdminInventario() {
                       <tbody>
                         {filtered.map((c, idx) => (
                           <tr key={c.id} className={`border-b last:border-0 hover:bg-muted/30 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-muted/10'}`}>
-                            <td className="sticky left-0 bg-inherit z-10 px-2 py-1.5 font-medium max-w-[200px] truncate">{c.nome}</td>
+                            <td className="sticky left-0 bg-inherit z-10 px-2 py-1.5 text-center">
+                              <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => setEditing(c)}><Pencil className="h-3.5 w-3.5" /></Button>
+                            </td>
+                            <td className="px-2 py-1.5 font-medium max-w-[200px] truncate">{c.nome}</td>
                             <td className="px-2 py-1.5">{c.pilar || '—'}</td>
                             <td className="px-2 py-1.5"><VeiculoBadge veiculo={c.veiculo} /></td>
                             <td className="px-2 py-1.5">{c.setor}</td>
