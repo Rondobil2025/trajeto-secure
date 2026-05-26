@@ -343,3 +343,22 @@ function VeiculoBadge({ veiculo }: { veiculo: string }) {
   if (v.includes('CARONA')) return <span className="inline-block bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded text-[10px] font-bold">CARONA</span>;
   return <span className="text-[10px] text-muted-foreground">{veiculo || '—'}</span>;
 }
+
+function CursoCell({ done, data }: { done?: boolean; data?: string | null }) {
+  if (!done && !data) {
+    return <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700">NÃO</span>;
+  }
+  if (data) {
+    const realizada = new Date(data);
+    const valido = (Date.now() - realizada.getTime()) / (1000 * 60 * 60 * 24) <= 365;
+    const cls = valido ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700';
+    const label = valido ? 'OK' : 'VENC.';
+    return (
+      <div className="flex flex-col items-center gap-0.5">
+        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${cls}`}>{label}</span>
+        <span className="text-[9px] text-muted-foreground">{realizada.toLocaleDateString('pt-BR')}</span>
+      </div>
+    );
+  }
+  return <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">SIM</span>;
+}
