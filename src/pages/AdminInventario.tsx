@@ -2,13 +2,16 @@ import { AdminSidebar } from '@/components/AdminSidebar';
 import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF } from '@/lib/types';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Loader2, Bike, Car, Bus, Users, AlertTriangle, ShieldCheck, ShieldX, ShieldAlert, Calendar, Filter } from 'lucide-react';
+import { Search, Loader2, Bike, Car, Bus, Users, AlertTriangle, ShieldCheck, ShieldX, ShieldAlert, Calendar, Filter, Pencil, Plus } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useColaboradores } from '@/hooks/useColaboradores';
 import { useBlitzList } from '@/hooks/useBlitz';
 import { useColaboradorMensal } from '@/hooks/useColaboradorMensal';
+import { EditInventarioDialog } from '@/components/EditInventarioDialog';
+import { NewColaboradorDialog } from '@/components/NewColaboradorDialog';
 
 const MotoIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
