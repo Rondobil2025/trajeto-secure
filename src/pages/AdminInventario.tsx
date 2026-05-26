@@ -216,7 +216,8 @@ export default function AdminInventario() {
                     <table className="w-full text-[11px] whitespace-nowrap">
                       <thead>
                         <tr className="bg-[hsl(230,50%,25%)] text-white">
-                          <th className="sticky left-0 bg-[hsl(230,50%,25%)] z-10 px-2 py-2 text-left font-semibold">NOME</th>
+                          <th className="sticky left-0 bg-[hsl(230,50%,25%)] z-10 px-2 py-2 text-center font-semibold">AÇÃO</th>
+                          <th className="px-2 py-2 text-left font-semibold">NOME</th>
                           <th className="px-2 py-2 text-left font-semibold">PILAR</th>
                           <th className="px-2 py-2 text-left font-semibold">VEÍCULO</th>
                           <th className="px-2 py-2 text-left font-semibold">SETOR</th>
