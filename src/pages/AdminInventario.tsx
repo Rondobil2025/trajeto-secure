@@ -56,6 +56,8 @@ export default function AdminInventario() {
   const [filtroSetor, setFiltroSetor] = useState('todos');
   const [filtroPilar, setFiltroPilar] = useState('todos');
   const [ano] = useState(new Date().getFullYear());
+  const [editing, setEditing] = useState<any | null>(null);
+  const [newOpen, setNewOpen] = useState(false);
   const { data: colaboradores = [], isLoading: loadingColab } = useColaboradores();
   const { data: blitzList = [], isLoading: loadingBlitz } = useBlitzList();
   const { data: mensalData = [], isLoading: loadingMensal } = useColaboradorMensal(ano);
