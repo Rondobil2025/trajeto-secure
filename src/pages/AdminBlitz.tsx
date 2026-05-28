@@ -42,6 +42,7 @@ export default function AdminBlitz() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Blitz Registradas</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">{blitzList.length} blitz no sistema</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

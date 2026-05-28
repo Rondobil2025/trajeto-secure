@@ -170,6 +170,7 @@ export default function AdminImportar() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Importar QLP / CSV</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">Importar colaboradores via planilha</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

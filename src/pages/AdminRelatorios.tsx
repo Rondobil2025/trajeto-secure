@@ -92,6 +92,7 @@ export default function AdminRelatorios() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Relatórios</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">Exportar dados em CSV</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

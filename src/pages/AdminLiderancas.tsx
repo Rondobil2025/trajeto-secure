@@ -29,6 +29,7 @@ export default function AdminLiderancas() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Lideranças</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">{liderancas.length} lideranças cadastradas</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 
