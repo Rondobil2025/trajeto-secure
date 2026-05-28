@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF, getVehicleLabel, getStatusLabel, type BlitzStatus, type VehicleType } from '@/lib/types';
 import { Input } from '@/components/ui/input';

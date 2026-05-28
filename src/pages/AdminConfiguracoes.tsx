@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { Settings, Database, Shield, Bell } from 'lucide-react';
 
 export default function AdminConfiguracoes() {

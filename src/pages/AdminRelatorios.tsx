@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { Button } from '@/components/ui/button';
 import { useColaboradores } from '@/hooks/useColaboradores';
 import { useBlitzList } from '@/hooks/useBlitz';
