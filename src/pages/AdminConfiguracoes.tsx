@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { Settings, Database, Shield, Bell } from 'lucide-react';
 
 export default function AdminConfiguracoes() {
@@ -13,6 +14,7 @@ export default function AdminConfiguracoes() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Configurações</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">Ajustes do sistema</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

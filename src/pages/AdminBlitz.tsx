@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF, getVehicleLabel, getStatusLabel, type BlitzStatus, type VehicleType } from '@/lib/types';
 import { Input } from '@/components/ui/input';
@@ -41,6 +42,7 @@ export default function AdminBlitz() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Blitz Registradas</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">{blitzList.length} blitz no sistema</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

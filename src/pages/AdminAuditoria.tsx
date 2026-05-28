@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { KpiCard } from '@/components/KpiCard';
 import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF } from '@/lib/types';
@@ -44,6 +45,7 @@ export default function AdminAuditoria() {
               <h1 className="text-2xl font-bold font-display text-primary-foreground">Modo Auditoria</h1>
               <p className="text-sm text-primary-foreground/60">Visão completa de conformidade e rastreabilidade</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { Button } from '@/components/ui/button';
 import { Upload, FileSpreadsheet, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
 import { useState, useRef } from 'react';
@@ -169,6 +170,7 @@ export default function AdminImportar() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Importar QLP / CSV</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">Importar colaboradores via planilha</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

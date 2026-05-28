@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF } from '@/lib/types';
 import { Input } from '@/components/ui/input';
@@ -151,10 +152,15 @@ export default function AdminInventario() {
       <main className="flex-1 overflow-y-auto">
         {/* Header */}
         <div className="bg-[hsl(230,50%,25%)] px-6 py-6 md:px-8">
-          <h1 className="text-xl font-bold font-display text-white tracking-tight">
-            DASHBOARD ANALÍTICO - BLITZ DE VEÍCULOS
-          </h1>
-          <p className="text-xs text-white/60 mt-1">Análise de Transporte dos Colaboradores | Atualizado em: {new Date().toLocaleDateString('pt-BR')}</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold font-display text-white tracking-tight">
+                DASHBOARD ANALÍTICO - BLITZ DE VEÍCULOS
+              </h1>
+              <p className="text-xs text-white/60 mt-1">Análise de Transporte dos Colaboradores | Atualizado em: {new Date().toLocaleDateString('pt-BR')}</p>
+            </div>
+            <AdminNavButtons />
+          </div>
         </div>
 
         {/* Vehicle distribution bar */}

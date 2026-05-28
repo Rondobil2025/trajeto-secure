@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { formatCPF } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -196,6 +197,7 @@ export default function AdminChecklist() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Checklist de Veículos</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">Inspeções detalhadas por tipo de veículo</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

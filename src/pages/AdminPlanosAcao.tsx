@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF, getPlanStatusLabel, getPriorityLabel, type PlanStatus, type Priority } from '@/lib/types';
 import { Input } from '@/components/ui/input';
@@ -58,6 +59,7 @@ export default function AdminPlanosAcao() {
               <h1 className="text-xl font-bold font-display text-primary-foreground">Planos de Ação</h1>
               <p className="text-xs text-primary-foreground/60 mt-0.5">{planos.length} planos registrados</p>
             </div>
+            <AdminNavButtons className="ml-auto" />
           </div>
         </div>
 

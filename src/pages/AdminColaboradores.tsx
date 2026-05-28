@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { StatusBadge } from '@/components/StatusBadge';
 import { formatCPF } from '@/lib/types';
 import { Input } from '@/components/ui/input';
@@ -75,7 +76,10 @@ export default function AdminColaboradores() {
       <AdminSidebar />
       <main className="flex-1 overflow-y-auto">
         <div className="px-4 md:px-8 py-6">
-          <h1 className="text-xl font-bold font-display mb-1">Colaboradores</h1>
+          <div className="flex items-center justify-between mb-1">
+            <h1 className="text-xl font-bold font-display">Colaboradores</h1>
+            <AdminNavButtons variant="light" />
+          </div>
           <p className="text-sm text-muted-foreground mb-4">{colaboradores.length} colaboradores cadastrados</p>
           <div className="relative mb-4 max-w-md">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />

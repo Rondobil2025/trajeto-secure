@@ -1,4 +1,5 @@
 import { AdminSidebar } from '@/components/AdminSidebar';
+import { AdminNavButtons } from '@/components/AdminNavButtons';
 import { KpiCard } from '@/components/KpiCard';
 import { useColaboradores } from '@/hooks/useColaboradores';
 import { useBlitzList } from '@/hooks/useBlitz';
@@ -114,8 +115,13 @@ export default function AdminDashboard() {
       <AdminSidebar />
       <main className="flex-1 overflow-y-auto">
         <div className="brand-gradient px-6 py-8 md:px-8">
-          <h1 className="text-2xl font-bold font-display text-primary-foreground">Dashboard Executivo</h1>
-          <p className="text-sm text-primary-foreground/60 mt-1">Blitz de Trajeto Rondobier — Visão Geral {new Date().getFullYear()}</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold font-display text-primary-foreground">Dashboard Executivo</h1>
+              <p className="text-sm text-primary-foreground/60 mt-1">Blitz de Trajeto Rondobier — Visão Geral {new Date().getFullYear()}</p>
+            </div>
+            <AdminNavButtons />
+          </div>
         </div>
 
         <div className="px-4 md:px-8 py-6 space-y-6 -mt-4">
