@@ -254,6 +254,7 @@ export type Database = {
           nome: string
           senha_hash: string | null
           setor: string
+          updated_at: string
         }
         Insert: {
           ativo?: boolean
@@ -264,6 +265,7 @@ export type Database = {
           nome: string
           senha_hash?: string | null
           setor?: string
+          updated_at?: string
         }
         Update: {
           ativo?: boolean
@@ -274,6 +276,7 @@ export type Database = {
           nome?: string
           senha_hash?: string | null
           setor?: string
+          updated_at?: string
         }
         Relationships: []
       }
